@@ -2,12 +2,12 @@ var clueRE = RegExp('^\\w$');
 var blackRE = RegExp('^\\s$');
 var punctRE = RegExp('^[-\"]$');
 
-var SQ_CLUE = 0;
+var SQ_ENTRY = 0;
 var SQ_BLACK = 1;
 var SQ_PUNCTUATION = 2;
 
 isSquareType = function (st) {
-    return st === SQ_CLUE || 
+    return st === SQ_ENTRY || 
            st === SQ_BLACK || 
            st === SQ_PUNCTUATION;
 }
@@ -19,7 +19,7 @@ isSquare = function (s) {
 }
 
 typeOfCharacter = function (c) {
-    return clueRE.test(c) ? SQ_CLUE :
+    return clueRE.test(c) ? SQ_ENTRY :
            blackRE.test(c) ? SQ_BLACK :
            punctRE.test(c) ? SQ_PUNCTUATION :
            undefined;
@@ -67,7 +67,7 @@ quoteOfBoard = function (b) {
     quote = "";
     for (i = 0;i < b.squares.length;i++) {
         s = b.squares[i];
-        if (s.type == SQ_CLUE || s.type == SQ_PUNCTUATION) {
+        if (s.type == SQ_ENTRY || s.type == SQ_PUNCTUATION) {
             quote += s.c;
         } else if (s.type == SQ_BLACK) {
             quote += " ";
