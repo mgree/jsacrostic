@@ -364,8 +364,10 @@ domOfCluelist = function (cl,id) {
 
             // now add its number
             var number = document.createElement("span");
-            number.setAttribute("class","acrostic-number");
-            number.appendChild(document.createTextNode(answer.number));
+            if (answer.number !== undefined) {
+                number.setAttribute("class","acrostic-number");
+                number.appendChild(document.createTextNode(answer.number));
+            }
             numbers.appendChild(number);
         }
         clueEntry.appendChild(letters);
