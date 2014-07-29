@@ -155,3 +155,42 @@ clearBoard = function (b) {
 
     return { height: b.height, width: b.width, squares: squares };
 };
+
+isClueSquare = function (cs) {
+    return typeof cs === "object" &&
+           "number" in cs &&
+           "c" in cs;
+};
+
+isClue = function (c) {
+    if (typeof(c) !== "array") { return false; }
+
+    for (var i = 0;i < c.length;i++) {
+        if (!isClueSquare(c[i])) {
+            return false;
+        }
+    }
+
+    return true;
+};
+
+isCluelist = function (cl) {
+    if (typeof cl !== "object") { return false; }
+
+    if (!("author" in cl && "title" in cl && "clues" in cl)) { 
+        return false; 
+    }
+
+    var cluetext = cl.author + cl.title;
+    if (cluetext.length !== clues.length) { return false; }
+
+    for (var i = 0;i < cl.clues.length;i++) {
+        var c = cl.clues[i];
+        
+        if (!isClue(c) || cluetext.charAt(0) !== c[0].c) {
+            return false;
+        }
+    }
+
+    return true;
+};
