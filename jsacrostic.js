@@ -441,13 +441,16 @@ playAcrostic = function (initialState, board, clues) {
     moveFocus = function (state,key) {
         assert(isState(state));
 
-        var number = 
-            key === K_LEFT ? state.number - 1 :
-            key === K_RIGHT ? state.number + 1 :
-            key === K_UP ? assert(false) :
-            key === K_DOWN ? assert(false) : assert(false);
-        return { focus: state.focus,
-                 number: state.focus === F_BOARD ? number : assert(false) };
+        if (state.focus === F_BOARD) {
+            var number = 
+                key === K_LEFT ? state.number - 1 :
+                key === K_RIGHT ? state.number + 1 :
+                key === K_UP ? assert(false) :
+                key === K_DOWN ? assert(false) : assert(false);
+            return { focus: state.focus, number: number };
+        } else {
+            assert(false);
+        }
     };
 
     $("body").keydown(function (evt) {
@@ -461,6 +464,8 @@ playAcrostic = function (initialState, board, clues) {
 
         updateDisplay(state);
     });
+    
+    updateDisplay(state);
 };
 
 });
