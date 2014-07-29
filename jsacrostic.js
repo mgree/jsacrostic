@@ -442,14 +442,12 @@ playAcrostic = function (initialState, board, clues) {
         }
     }
 
-    var squareOf = {};
     var number = 0;
     var upOf = {};
     var downOf = {};
     for (var i = 0;i < board.squares.length;i++) {
         if (board.squares[i].type === SQ_ENTRY) {
             number += 1;
-            squareOf[number] = i;
 
             for (var above = i-board.width;
                  above > 0;
@@ -474,23 +472,39 @@ playAcrostic = function (initialState, board, clues) {
     moveFocus = function (state,key) {
         assert(isState(state));
 
+        var number = undefined;
         if (state.focus === F_BOARD) {
-            var number = 
+            number = 
                 key === K_LEFT ? state.number - 1 :
                 key === K_RIGHT ? state.number + 1 :
                 key === K_UP ? upOf[state.number] :
-                key === K_DOWN ? downOf[state.number] : assert(false);
+                key === K_DOWN ? downOf[state.number] : 
+                assert(false);
+        } else {
+            var ci = clueIndexOf[state.number];
 
-            if (number === undefined || 
-                number < 0 || number > board.number) {
+            ci = key === K_LEFT ? { clue: ci.clue, idx: ci.idx - 1 } :
+                 key === K_RIGHT ? { clue: ci.clue, idx: ci.idx + 1 } :
+                 key === K_UP ? { clue: ci.clue-1, idx: 0 } :
+                 key === K_DOWN ? { clue: ci.clue+1, idx: 0 } :
+                 assert(false);
+
+            if (ci.clue < 0 || ci.clue >= clues.clues.length ||
+                ci.idx < 0 || ci.idx > clues.clues[ci.clue].answer.length) {
                 // TODO beep or something---an invalid move
                 number = state.number;
+            } else {
+                number = clues.clues[ci.clue].answer[ci.idx].number;
             }
-            
-            return { focus: state.focus, number: number };
-        } else {
-            assert(false);
         }
+
+        if (number === undefined || 
+            number < 0 || number > board.number) {
+            // TODO beep or something---an invalid move
+            number = state.number;
+        }
+            
+        return { focus: state.focus, number: number };
     };
 
     $("body").keydown(function (evt) {
