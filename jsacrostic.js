@@ -38,7 +38,6 @@ isBoard = function (b) {
 
     if (!("width" in b && "height" in b && "squares" in b)) { return false; }
 
-
     // shouldn't be bigger than the dimensions
     if (b.squares.length > b.width * b.height) { return false; }
 
@@ -111,7 +110,6 @@ domOfBoard = function (b) {
         var s = b.squares[i];
 
         var square = document.createElement("span");
-        square.setAttribute("type","text");
         square.setAttribute("class","acrostic-square " + s.type);
         square.appendChild(document.createTextNode(s.c));
 
@@ -123,4 +121,37 @@ domOfBoard = function (b) {
     return board;
 };
 
+cloneSquare = function (s) {
+    assert(isSquare(s));
 
+    return { type: s.type, c: s.c };
+};
+
+cloneBoard = function (b) {
+    assert(isBoard(b));
+
+    var squares = [];
+    for (var i = 0;i < b.squares.length;i++) {
+        squares.push(cloneSquare(b.squares[i]));
+    }
+
+    return { height: b.height, width: b.width, squares: squares };   
+};
+
+clearSquare = function (s) {
+    assert(isSquare(s));
+
+    return { type: s.type,
+             c: s.type === SQ_ENTRY ? " " : s.c };
+};
+
+clearBoard = function (b) {
+    var newB = cloneBoard(b);
+
+    var squares = [];
+    for (var i = 0;i < b.squares.length;i++) {
+        squares.push(clearSquare(b.squares[i]));
+    }
+
+    return { height: b.height, width: b.width, squares: squares };
+};

@@ -3,7 +3,12 @@ h1#title { text-align: center; }
 div.acrostic-board {
     border: solid #000;
     background-color: #000;
+
     display: table;
+    table-layout: fixed;
+    empty-cells: show;
+    border-collapse: collapse;
+
     height: auto;
     width: auto;
     z-index: 0;
@@ -11,15 +16,22 @@ div.acrostic-board {
 
 div.acrostic-board div.acrostic-row {
     display: table-row;
+    min-height: 20px;
 }
 
 span.acrostic-square {
     display: table-cell;
-    border-right: solid #000 1px;
-    border-top: solid #000 1px;
-    text-align: center;
+
+    border: solid #000 1px;
+    border: solid #000 1px;
     margin: 0;
+
+    text-align: center;
+    white-space: pre;
+
     min-width: 20px;
+    min-height: 20px;
+
     resize: none;
     z-index: 1;
 }

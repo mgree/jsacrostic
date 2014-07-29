@@ -19,8 +19,17 @@ assert(isBoard(boardOfQuote(quote,25)));
 jQuery(function ($) {
   b = boardOfQuote(quote,32);
   assert(isBoard(b));
-
   $(domOfBoard(b)).insertAfter('#acrostic');
+  $("<br/>").insertAfter('#acrostic');
+  $(domOfBoard(clearBoard(b))).insertAfter('#acrostic');
+
+  $("<br/>").insertAfter('#acrostic');
+
+  b = boardOfQuote(quote,40);
+  assert(isBoard(b));
+  $(domOfBoard(b)).insertAfter('#acrostic');
+  $("<br/>").insertAfter('#acrostic');
+  $(domOfBoard(clearBoard(b))).insertAfter('#acrostic');
 });
 </script>
 </head>
