@@ -4,10 +4,28 @@
 <head>
 <title>jsacrostic</title>
 <link rel="stylesheet" media="screen" href="main.css" />
-<script type="text/javascript" src="jquery-1.11.1.min.js"></script>
 <script type="text/javascript" src="jsacrostic.js"></script>
+<script type="text/javascript" src="jquery-1.11.1.min.js"></script>
+<script type="text/javascript">
+
+// for testing
+quote = "Now at last without fantasies or self-deception, cut off from the mistakes and confusion of the past, grave and simple, carrying a small suitcase, getting on a bus, like girls in movies leaving home, convents, lovers, I supposed I would get started on my real life."
+author = "Alice Munro";
+title = "Lives of Girls and Women";
+
+assert(isBoard(boardOfQuote(quote,20)));
+assert(isBoard(boardOfQuote(quote,25)));
+
+jQuery(function ($) {
+  b = boardOfQuote(quote,32);
+  assert(isBoard(b));
+
+  $(domOfBoard(b)).insertAfter('#acrostic');
+});
+</script>
 </head>
 <body>
 <h1 id="title">jsacrostic</h1>
+<div id="acrostic"></div>
 </body>
 </html>

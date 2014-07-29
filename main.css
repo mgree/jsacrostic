@@ -1,3 +1,33 @@
-
-
 h1#title { text-align: center; }
+
+div.acrostic-board {
+    border: solid #000;
+    background-color: #000;
+    display: table;
+    height: auto;
+    width: auto;
+    z-index: 0;
+}
+
+div.acrostic-board div.acrostic-row {
+    display: table-row;
+}
+
+span.acrostic-square {
+    display: table-cell;
+    border-right: solid #000 1px;
+    border-top: solid #000 1px;
+    text-align: center;
+    margin: 0;
+    min-width: 20px;
+    resize: none;
+    z-index: 1;
+}
+
+span.acrostic-square.acrostic-entry {
+    background-color: #fff;
+}
+
+span.acrostic-square.acrostic-punct {
+    background-color: #fff;
+}

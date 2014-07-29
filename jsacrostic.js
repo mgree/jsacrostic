@@ -2,11 +2,11 @@ var clueRE = RegExp('^\\w$');
 var blackRE = RegExp('^\\s$');
 var punctRE = RegExp('^[-\"]$');
 
-var SQ_ENTRY = 0;
-var SQ_BLACK = 1;
-var SQ_PUNCTUATION = 2;
+var SQ_ENTRY = "acrostic-entry";
+var SQ_BLACK = "acrostic-black";
+var SQ_PUNCTUATION = "acrostic-punct";
 
-assert = function (e) { if (!e) { console.log("Failed assertion!"); } };
+assert = function (e) { if (!e) { throw "Failed assertion!"; } };
 
 isSquareType = function (st) {
     return st === SQ_ENTRY || 
@@ -38,6 +38,7 @@ isBoard = function (b) {
 
     if (!("width" in b && "height" in b && "squares" in b)) { return false; }
 
+
     // shouldn't be bigger than the dimensions
     if (b.squares.length > b.width * b.height) { return false; }
 
@@ -59,13 +60,13 @@ boardOfQuote = function (quote, width) {
     for (var i = 0;i < q.length;i++) {
         var s = squareOfCharacter(q.charAt(i));
         if (s !== undefined) {
-            squares.push(s);
-
-            row += 1;
             if (row === width) {
                 row = 0;
-                height +=1;
+                height += 1;
             }
+
+            squares.push(s);
+            row += 1;
         }
     }
 
@@ -86,17 +87,40 @@ quoteOfBoard = function (b) {
     }
 
     return quote;
-}
+};
 
 domOfBoard = function (b) {
     assert(isBoard(b));
-}
 
-// for testing
-quote = "Now at last without fantasies or self-deception, cut off from the mistakes and confusion of the past, grave and simple, carrying a small suitcase, getting on a bus, like girls in movies leaving home, convents, lovers, I supposed I would get started on my real life."
-author = "Alice Munro";
-title = "Lives of Girls and Women";
+    // TODO abstract out the document...who knows where it came from
+    // can we just use jquery to do this?
+    var board = document.createElement("div");
+    // TODO abstract out these attributes
+    board.setAttribute("class","acrostic-board");
 
-assert(isBoard(boardOfQuote(quote,20)));
-assert(isBoard(boardOfQuote(quote,25)));
-assert(isBoard(boardOfQuote(quote,32)));
+    var row = undefined;
+    var numRows = 0;
+    for (var i = 0;i < b.squares.length;i++) {
+        if (i % b.width === 0) {
+            numRows++;
+            row = document.createElement("div");
+            row.setAttribute("class","acrostic-row");
+            board.appendChild(row);
+        }
+
+        var s = b.squares[i];
+
+        var square = document.createElement("span");
+        square.setAttribute("type","text");
+        square.setAttribute("class","acrostic-square " + s.type);
+        square.appendChild(document.createTextNode(s.c));
+
+        row.appendChild(square);
+    }
+
+    assert(numRows == b.height);
+
+    return board;
+};
+
+
