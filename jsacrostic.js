@@ -380,10 +380,6 @@ domOfCluelist = function (cl,id) {
     return cluelist;
 };
 
-// TODO cross-checking
-
-// TODO active bits
-
 F_BOARD = "board";
 F_CLUES = "clues";
 
@@ -523,5 +519,9 @@ playAcrostic = function (initialState, board, clues) {
     
     updateDisplay(state);
 };
+
+// TODO cross-checking
+// TODO editing
+// TODO keep focus, even when tab happens
 
 });
