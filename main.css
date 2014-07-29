@@ -47,7 +47,7 @@ span.acrostic-square.acrostic-entry.acrostic-primary {
 span.acrostic-square.acrostic-entry span.acrostic-square-number {
     z-index: 1;
 
-    margin-left: 1px;
+    margin: 0 1px;
 
     float: left;
     position: relative;
@@ -60,7 +60,7 @@ span.acrostic-square.acrostic-entry span.acrostic-square-number {
 span.acrostic-square.acrostic-entry span.acrostic-square-clue {
     z-index: 1;
 
-    margin-left: 1px;
+    margin: 0 1px;
 
     float: right;
     position: relative;
