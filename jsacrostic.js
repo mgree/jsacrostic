@@ -157,6 +157,7 @@ clearBoard = function (b) {
 };
 
 isClueSquare = function (cs) {
+    // TODO allow punctuation... can we reuse the squares above? but we should never have SQ_BLACK...
     return typeof cs === "object" &&
            "number" in cs &&
            "c" in cs;
@@ -242,4 +243,63 @@ cluelistOfClues = function (cas, author, title) {
              clues: clues };
 };
 
-// TODO lettering of clues, numbering of squares
+letterOfIndex = function (i) {
+    assert(typeof i === number && 0 <= i && i < 51); // TODO crappy arbitrary limit...
+
+    return "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".charAt(i);
+};
+
+formatClue = function (clue, i) {
+    return letterOfIndex(i) + ". " + clue;
+};
+
+domOfCluelist = function (c) {
+    assert(isCluelist(c));
+
+    // TODO abstract out document variable
+    var cluelist = document.createElement("div");
+    cluelist.setAttribute("class","acrostic-cluelist");
+
+    for (var i = 0;i < cluelist.clues.length;i++) {
+        var c = cluelist.clues[i];
+
+        var clueEntry = document.createElement("div");
+        clueEntry.setAttribute("class","acrostic-clueentry");
+
+        // add the clue text
+        var clue = document.createElement("span");
+        clue.setAttribute("class","acrostic-clue");
+        clue.appendChild(document.createTextNode(formatClue(c.clue,i)));
+        clueEntry.appendChild(clue);
+        
+        // add the entry text
+        var entry = document.createElement("div");
+        entry.setAttribute("class","acrostic-entry");
+        for (var j = 0;j < c.answer.length;j++) {   
+            var answer = c.answer[j];
+         
+            // add the actual slot
+            var slot = document.createElement("div");
+            slot.setAttribute("class","acrostic-entryslot");
+            slot.appendChild(document.createTextNode(answer.c));
+            
+            entry.appendChild(slot);
+
+            // now add its number
+            var number = document.createElement("span");
+            number.setAttribute("class","acrostic-slotnumber");
+            number.appendChild(document.createTextNode(answer.number));
+
+            entry.appendChild(number);
+        }
+        clueEntry.appendChild(entry);
+
+        // with everything wrapped up, save the clue entry and move on
+        cluelist.appendChild(clueEntry);
+    }
+
+    return cluelist;
+};
+
+
+// TODO numbering of squares, cross-checking
