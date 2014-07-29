@@ -36,7 +36,13 @@ squareOfCharacter = function (c) {
 isBoard = function (b) {
     if (typeof b !== "object") { return false; }
 
-    if (!("width" in b && "height" in b && "squares" in b)) { return false; }
+    if (!("width" in b && 
+          "height" in b && 
+          "squares" in b)) {
+        return false; 
+    }
+
+    if (!b.squares.every(isSquare)) { return false; }
 
     // shouldn't be bigger than the dimensions
     if (b.squares.length > b.width * b.height) { return false; }
@@ -88,7 +94,17 @@ quoteOfBoard = function (b) {
     return quote;
 };
 
-domOfBoard = function (b) {
+squareId = function (i) { 
+    assert(typeof i === "number");
+    return "acrostic-square-" + i; 
+};
+
+clueId = function (i) { 
+    assert(typeof i === "number");
+    return "acrostic-clue-" + i; 
+};
+
+domOfBoard = function (b,id) {
     assert(isBoard(b));
 
     // TODO abstract out the document...who knows where it came from
@@ -96,12 +112,14 @@ domOfBoard = function (b) {
     var board = document.createElement("div");
     // TODO abstract out these attributes
     board.setAttribute("class","acrostic-board");
+    board.setAttribute("id",id);
 
     var row = undefined;
     var numRows = 0;
+    var number = 0;
     for (var i = 0;i < b.squares.length;i++) {
         if (i % b.width === 0) {
-            numRows++;
+            numRows += 1;
             row = document.createElement("div");
             row.setAttribute("class","acrostic-row");
             board.appendChild(row);
@@ -111,7 +129,17 @@ domOfBoard = function (b) {
 
         var square = document.createElement("span");
         square.setAttribute("class","acrostic-square " + s.type);
+        if (s.type == SQ_ENTRY) {
+            number += 1;
+            square.setAttribute("id",squareId(number));
+            
+            var num = document.createElement("span");
+            num.setAttribute("class","acrostic-square-number");
+            num.appendChild(document.createTextNode(number));
+            square.appendChild(num);
+        }
         square.appendChild(document.createTextNode(s.c));
+
 
         row.appendChild(square);
     }
@@ -166,13 +194,7 @@ isClueSquare = function (cs) {
 isClueAnswer = function (ca) {
     if (typeof ca !== "object") { return false; }
 
-    for (var i = 0;i < ca.length;i++) {
-        if (!isClueSquare(ca[i])) {
-            return false;
-        }
-    }
-
-    return true;
+    return ca.every(isClueSquare);
 };
 
 isClue = function (c) {
@@ -188,20 +210,11 @@ isCluelist = function (cl) {
         return false; 
     }
 
-    var cluetext = cl.author + cl.title;
-    if (cluetext.length !== clues.length) { return false; }
-    
-    for (var i = 0;i < cl.clues.length;i++) {
-        var c = cl.clues[i];
-        
-        if (!(isClue(c) &&
-              sanitize(cluetext.charAt(i)) === 
-              sanitize(c.answer[0].c))) {
-            return false;
-        }
-    }
+    if (!cl.clues.every(isClue)) { return false; }
 
-    return true;
+    return (cl.author + cl.title) ===
+           cl.clues.map(function (c) { 
+               return c.answer[0].c; }).join("");
 };
 
 answerOfCAN = function (answer, numbers) {
@@ -235,7 +248,7 @@ cluelistOfClues = function (cas, author, title) {
                "answer" in c && typeof c.answer === "string" &&
                "numbers" in c && typeof c.numbers === "object");
         clues.push({ clue: c.clue, 
-                     answer: answerOfCAN(c.answer,c.numbers) });
+                     answer: answerOfCAN(sanitize(c.answer),c.numbers) });
     }
 
     return { author: sanitize(author), 
@@ -250,27 +263,27 @@ letterOfIndex = function (i) {
     return "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".charAt(i);
 };
 
-formatClue = function (clue, i) {
-    return letterOfIndex(i) + ". " + clue;
-};
-
-domOfCluelist = function (cl) {
+domOfCluelist = function (cl,id) {
     assert(isCluelist(cl));
 
     // TODO abstract out document variable
     var cluelist = document.createElement("div");
     cluelist.setAttribute("class","acrostic-cluelist");
+    cluelist.setAttribute("id",id);
 
     for (var i = 0;i < cl.clues.length;i++) {
         var c = cl.clues[i];
 
+        var idx = letterOfIndex(i);
+
         var clueEntry = document.createElement("div");
         clueEntry.setAttribute("class","acrostic-clueentry");
+        clueEntry.setAttribute("id","acrostic-clue-"+idx);
 
         // add the clue text
         var clue = document.createElement("span");
         clue.setAttribute("class","acrostic-clue");
-        clue.appendChild(document.createTextNode(formatClue(c.clue,i)));
+        clue.appendChild(document.createTextNode(idx + ". " + c.clue));
         clueEntry.appendChild(clue);
         
         // add slots and the numbers
@@ -284,6 +297,7 @@ domOfCluelist = function (cl) {
             // add the actual letter
             var letter = document.createElement("span");
             letter.setAttribute("class","acrostic-letter");
+            letter.setAttribute("id",clueId(answer.number));
             letter.appendChild(document.createTextNode(answer.c));
             letters.appendChild(letter);
 
@@ -304,4 +318,6 @@ domOfCluelist = function (cl) {
 };
 
 
-// TODO numbering of squares, cross-checking
+// TODO letter-indexing of squares, cross-checking
+
+// TODO active bits
