@@ -1,3 +1,11 @@
+/* TODO XXX representation!  I have the strong suspicion that my
+ * representation choices here were wrong. right now, any way you
+ * slice it, it's annoying to come up with both the quote and the
+ * cluelist, and it's tricky to keep them in sync. it might be easier
+ * to view the quote board as just being a structure and then working
+ * almost entirely with cluelists. eh.
+ */
+(jsacrostic = function ($) {
 var clueRE = /^\w$/;
 var blackRE = /^\s$/;
 var punctRE = /^[-"]$/;
@@ -17,7 +25,8 @@ isSquareType = function (st) {
 isSquare = function (s) {
     return typeof s === "object" && 
            "type" in s && isSquareType(s.type) && 
-           "c" in s && typeof s.c === "string";
+           "c" in s && typeof s.c === "string" &&
+           (s.clue === undefined || typeof s.clue === "string");
 };
 
 typeOfCharacter = function (c) {
@@ -38,9 +47,12 @@ isBoard = function (b) {
 
     if (!("width" in b && 
           "height" in b && 
-          "squares" in b)) {
+          "squares" in b &&
+          "number" in b)) {
         return false; 
     }
+
+    if (typeof b.number !== "number") { return false; }
 
     if (!b.squares.every(isSquare)) { return false; }
 
@@ -49,6 +61,8 @@ isBoard = function (b) {
 
     // but the dimensions should be a tight fit
     if (b.squares.length < b.width * (b.height - 1)) { return false; }
+
+    // TODO check that b.number matches with number of entries in b.squares
 
     return true;
 };
@@ -62,12 +76,14 @@ boardOfQuote = function (quote, width) {
     var squares = [];
     var height = 1;
     var row = 0;
+    var number = 0;
     for (var i = 0;i < q.length;i++) {
         var s = squareOfCharacter(q.charAt(i));
         if (s !== undefined) {
             if (row === width) {
                 row = 0;
                 height += 1;
+                number += 1;
             }
 
             squares.push(s);
@@ -75,7 +91,8 @@ boardOfQuote = function (quote, width) {
         }
     }
 
-    return { width: width, height: height, squares: squares };
+    return { width: width, height: height, 
+             squares: squares, number: number };
 };
 
 quoteOfBoard = function (b) {
@@ -137,6 +154,13 @@ domOfBoard = function (b,id) {
             num.setAttribute("class","acrostic-square-number");
             num.appendChild(document.createTextNode(number));
             square.appendChild(num);
+
+            var clue = document.createElement("span");
+            clue.setAttribute("class","acrostic-square-clue");
+            if ("clue" in s) {
+                clue.appendChild(document.createTextNode(s.clue));
+            }
+            square.appendChild(clue);
         }
         square.appendChild(document.createTextNode(s.c));
 
@@ -174,8 +198,6 @@ clearSquare = function (s) {
 };
 
 clearBoard = function (b) {
-    var newB = cloneBoard(b);
-
     var squares = [];
     for (var i = 0;i < b.squares.length;i++) {
         squares.push(clearSquare(b.squares[i]));
@@ -185,10 +207,12 @@ clearBoard = function (b) {
 };
 
 isClueSquare = function (cs) {
-    // TODO allow punctuation... can we reuse the squares above? but we should never have SQ_BLACK...
+    // TODO can we reuse the squares above? 
+    // but we should never have SQ_BLACK...
+    // some of this representation probably isn't the easiest :/
     return typeof cs === "object" &&
-           "number" in cs &&
-           "c" in cs;
+           (cs.number === undefined || typeof cs.number === "number") &&
+           typeof cs.c === "string";
 };
 
 isClueAnswer = function (ca) {
@@ -217,6 +241,12 @@ isCluelist = function (cl) {
                return c.answer[0].c; }).join("");
 };
 
+slotOfCAN = function (answer, number) {
+    return { c: answer,
+             // TODO this is sloppy
+             number: punctRE.test(answer) ? undefined : number };
+};
+
 answerOfCAN = function (answer, numbers) {
     assert(typeof answer === "string");
     assert(typeof numbers === "object");
@@ -224,12 +254,11 @@ answerOfCAN = function (answer, numbers) {
 
     a = [];
     for (var i = 0;i < answer.length;i++) {
-        a.push({ c: answer.charAt(i),
-                 number: numbers[i] });
+        a.push(slotOfCAN(answer.charAt(i), numbers[i]));
     }
 
     return a;
-}
+};
 
 sanitize = function (s) {
     return s.toUpperCase().replace(/\s/g,"");
@@ -262,6 +291,32 @@ letterOfIndex = function (i) {
 
     return "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".charAt(i);
 };
+
+letterBoard = function (b, cl) {
+    var mapping = {};
+    var number = 0;
+    for (var i = 0;i < b.squares.length;i++) {
+        if (b.squares[i].type === SQ_ENTRY) {
+            number += 1;
+            mapping[number] = i;
+        }
+    }
+
+    for (var i = 0;i < cl.clues.length;i++) {
+        var a = cl.clues[i].answer;
+        for (var j = 0;j < a.length;j++) {
+            if (a[j].number !== undefined) {
+                var idx = mapping[a[j].number];
+                var ltr = letterOfIndex(i);
+
+                b.squares[idx].clue = ltr;
+            }
+        }
+    }
+
+    return b;
+};
+
 
 domOfCluelist = function (cl,id) {
     assert(isCluelist(cl));
@@ -297,7 +352,9 @@ domOfCluelist = function (cl,id) {
             // add the actual letter
             var letter = document.createElement("span");
             letter.setAttribute("class","acrostic-letter");
-            letter.setAttribute("id",clueId(answer.number));
+            if (answer.number !== undefined) {
+                letter.setAttribute("id",clueId(answer.number));
+            }
             letter.appendChild(document.createTextNode(answer.c));
             letters.appendChild(letter);
 
@@ -317,7 +374,93 @@ domOfCluelist = function (cl,id) {
     return cluelist;
 };
 
-
-// TODO letter-indexing of squares, cross-checking
+// TODO cross-checking
 
 // TODO active bits
+
+F_BOARD = "board";
+F_CLUES = "clues";
+
+cloneState = function (state) {
+    assert(isState(state));
+
+    return { number: state.number, 
+             focus: state.focus === F_BOARD ? F_BOARD : F_CLUES };
+}
+
+isState = function (state) {
+    return typeof state === "object" &&
+           "number" in state && typeof state.number === "number" &&
+           "focus" in state && (state.focus === F_BOARD || 
+                                state.focus === F_CLUES);
+};
+
+flipFocus = function (state) {
+    assert(isState(state));
+
+    return { number: state.number, 
+             focus: state.focus === F_BOARD ? F_CLUES : F_BOARD };
+}
+
+updateDisplay = function (state) {
+    assert(isState(state));
+
+    // drop old mapping
+    $(".acrostic-primary").removeClass("acrostic-primary");
+    $(".acrostic-secondary").removeClass("acrostic-secondary");
+
+    // add new ones
+    var board = $("#"+squareId(state.number));
+    var clue = $("#"+clueId(state.number));
+    var primary = state.focus === F_BOARD ? board : clue;
+    var secondary = state.focus === F_BOARD ? clue : board;
+
+    primary.addClass("acrostic-primary");
+    secondary.addClass("acrostic-secondary");
+};
+
+K_TAB = 9;
+K_LEFT = 37;
+K_UP = 38;
+K_RIGHT = 39;
+K_DOWN = 40;
+
+playAcrostic = function (initialState, board, clues) {
+    var state = cloneState(initialState);
+
+    var clueIndexOf = {};
+    for (var i = 0;i < clues.clues.length;i++) {
+        var a = clues.clues[i].answer;
+        for (var j = 0;j < a.length;j++) {
+            if (a[j].number !== undefined) {
+                clueIndexOf[a[j].number] = { clue: i, idx: j };
+            }
+        }
+    }
+
+    moveFocus = function (state,key) {
+        assert(isState(state));
+
+        var number = 
+            key === K_LEFT ? state.number - 1 :
+            key === K_RIGHT ? state.number + 1 :
+            key === K_UP ? assert(false) :
+            key === K_DOWN ? assert(false) : assert(false);
+        return { focus: state.focus,
+                 number: state.focus === F_BOARD ? number : assert(false) };
+    };
+
+    $("body").keydown(function (evt) {
+        if (evt.keyCode === K_TAB) {
+            state = flipFocus(state);
+        } else if (K_LEFT <= evt.keyCode && evt.keyCode <= K_DOWN)  {
+            state = moveFocus(state, evt.keyCode);
+        } else {
+            console.log(evt);
+        }
+
+        updateDisplay(state);
+    });
+};
+
+});

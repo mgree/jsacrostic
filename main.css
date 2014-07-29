@@ -19,6 +19,7 @@ div.acrostic-board div.acrostic-row {
     min-height: 20px;
 }
 
+
 span.acrostic-square {
     display: table-cell;
 
@@ -39,12 +40,29 @@ span.acrostic-square.acrostic-entry {
     background-color: #fff;
 }
 
+span.acrostic-square.acrostic-entry.acrostic-primary {
+    background-color: #a22;
+}
+
 span.acrostic-square.acrostic-entry span.acrostic-square-number {
     z-index: 1;
 
     margin-left: 1px;
 
     float: left;
+    position: relative;
+    top: -1px;   
+
+    vertical-align: top;
+    font-size: x-small;
+}
+
+span.acrostic-square.acrostic-entry span.acrostic-square-clue {
+    z-index: 1;
+
+    margin-left: 1px;
+
+    float: right;
     position: relative;
     top: -1px;   
 
@@ -90,6 +108,8 @@ span.acrostic-letter {
 
     text-align: center;
 
+    border: solid 1px #fff;
+
     min-width: 28px;
     max-width: 28px;
     padding: 0px;
@@ -111,4 +131,12 @@ span.acrostic-number {
     max-width: 28px;
     padding: 0px;
     margin: 0px;
+}
+
+span.acrostic-primary {
+    background-color: #a22;
+}
+
+span.acrostic-secondary {
+    border: solid #a22 1px;
 }

@@ -4,9 +4,13 @@
 <head>
 <title>jsacrostic</title>
 <link rel="stylesheet" media="screen" href="main.css" />
-<script type="text/javascript" src="jsacrostic.js"></script>
 <script type="text/javascript" src="jquery-1.11.1.min.js"></script>
+<script type="text/javascript" src="jsacrostic.js"></script>
 <script type="text/javascript">
+jQuery(function ($) {
+
+
+jsacrostic($);
 
 // for testing
 quote = "Now at last without fantasies or self-deception, cut off from the mistakes and confusion of the past, grave and simple, carrying a small suitcase, getting on a bus, like girls in movies leaving home, convents, lovers, I supposed I would get started on my real life."
@@ -17,46 +21,51 @@ clues = [{ clue: "1", answer: "manowt" },
          { clue: "2", answer: "ulast" },
          { clue: "3", answer: "niwthot" },
          { clue: "4", answer: "rcfatas" }, 
-         { clue: "5", answer: "oecutfffromth" },
+         { clue: "5", answer: "oecuromth" },
          { clue: "6", answer: "lstakesand" },
-         { clue: "7", answer: "isimpecarrying" }, 
-         { clue: "8", answer: "vasmallsuitcas" }, 
+         { clue: "7", answer: "isimprying" }, 
+         { clue: "8", answer: "vasmaltcas" }, 
          { clue: "9", answer: "egettingonabus" },
          { clue: "10", answer: "slikegi" },
-         { clue: "11", answer: "oinmovielevinghme" },
+         { clue: "11", answer: "oinmovinghme" },
          { clue: "12", answer: "fconvetslov" },
-         { clue: "13", answer: "guletstartedoyral" },
+         { clue: "13", answer: "gulettedoyral" },
          { clue: "14", answer: "ile" },
-         { clue: "15", answer: "ronofthepastgraeand" },
+         { clue: "15", answer: "ronofthaeand" },
          { clue: "16", answer: "lersIsupposedI" },
-         { clue: "17", answer: "siesoself-deeption" },
+         { clue: "17", answer: "siself-deeption" },
          { clue: "18", answer: "aconfusi" },
-         { clue: "19", answer: "n" },
-         { clue: "20", answer: "d" },
-         { clue: "21", answer: "w" },
-         { clue: "22", answer: "o" },
-         { clue: "23", answer: "m" },
-         { clue: "24", answer: "e" },
-         { clue: "25", answer: "n" }];
+         { clue: "19", answer: "necar" },
+         { clue: "20", answer: "dstar" },
+         { clue: "21", answer: "weso" },
+         { clue: "22", answer: "otfff" },
+         { clue: "23", answer: "mielev" },
+         { clue: "24", answer: "elsui" },
+         { clue: "25", answer: "nepastgr" }];
 
 // TODO these numbers will need to be fixed when we cross check boards with clues
 var number = 1;
 for (var i = 0;i < clues.length;i++) {
-   clues[i].numbers = Array.prototype.map.call(clues[i].answer, function () { return number++; });
+   clues[i].numbers = Array.prototype.map.call(clues[i].answer, 
+     function (a) { return a === "-" ? -1 : number++; });
 }
 
 assert(isBoard(boardOfQuote(quote,20)));
 assert(isBoard(boardOfQuote(quote,25)));
 
-assert(isCluelist(cluelistOfClues(clues,author,title)));
+ assert(isCluelist(cluelistOfClues(clues,author,title)));
 
-jQuery(function ($) {
   b = boardOfQuote(quote,32);
   c = cluelistOfClues(clues,author,title);
   assert(isBoard(b) && isCluelist(c));
+  b = letterBoard(b,c);
+  assert(isBoard(b));
 
   $('#acrostic').replaceWith(domOfBoard(b,"board"));
   $(domOfCluelist(c,"clues")).insertAfter("#board");
+ 
+  state = { number: 1, focus: F_BOARD };
+  playAcrostic(state, b, c);  
 });
 </script>
 </head>
