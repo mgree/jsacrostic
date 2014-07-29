@@ -10,11 +10,45 @@
 
 // for testing
 quote = "Now at last without fantasies or self-deception, cut off from the mistakes and confusion of the past, grave and simple, carrying a small suitcase, getting on a bus, like girls in movies leaving home, convents, lovers, I supposed I would get started on my real life."
-author = "Alice Munro";
+author = "Munro";
 title = "Lives of Girls and Women";
+// these could probably be improved :)
+clues = [{ clue: "1", answer: "manowt" },
+         { clue: "2", answer: "ulast" },
+         { clue: "3", answer: "niwthot" },
+         { clue: "4", answer: "rcfatasiesoself-deeption" }, 
+         { clue: "5", answer: "oecutfffromth" },
+         { clue: "6", answer: "lstakesandconfusionofthepastgraeand" },
+         { clue: "7", answer: "isimpecarrying" }, 
+         { clue: "8", answer: "vasmallsuitcas" }, 
+         { clue: "9", answer: "egettingonabus" },
+         { clue: "10", answer: "slikegi" },
+         { clue: "11", answer: "oinmovielevinghme" },
+         { clue: "12", answer: "fconvetsloversIsupposedI" },
+         { clue: "13", answer: "guletstartedoyral" },
+         { clue: "14", answer: "ile" },
+         { clue: "15", answer: "r" },
+         { clue: "16", answer: "l" },
+         { clue: "17", answer: "s" },
+         { clue: "18", answer: "a" },
+         { clue: "19", answer: "n" },
+         { clue: "20", answer: "d" },
+         { clue: "21", answer: "w" },
+         { clue: "22", answer: "o" },
+         { clue: "23", answer: "m" },
+         { clue: "24", answer: "e" },
+         { clue: "25", answer: "n" }];
+
+// TODO these numbers will need to be fixed when we cross check boards with clues
+var number = 1;
+for (var i = 0;i < clues.length;i++) {
+   clues[i].numbers = Array.prototype.map.call(clues[i].answer, function () { return number++; });
+}
 
 assert(isBoard(boardOfQuote(quote,20)));
 assert(isBoard(boardOfQuote(quote,25)));
+
+assert(isCluelist(cluelistOfClues(clues,author,title)));
 
 jQuery(function ($) {
   b = boardOfQuote(quote,32);
@@ -29,12 +63,11 @@ jQuery(function ($) {
   assert(isBoard(b));
   $(domOfBoard(b)).insertAfter('#acrostic');
   $("<br/>").insertAfter('#acrostic');
-  $(domOfBoard(clearBoard(b))).insertAfter('#acrostic');
+  $(domOfBoard(clearBoard(b))).insertAfter('#acrostic');  
 });
 </script>
 </head>
 <body>
-<h1 id="title">jsacrostic</h1>
 <div id="acrostic"></div>
 </body>
 </html>

@@ -1,6 +1,6 @@
-var clueRE = RegExp('^\\w$');
-var blackRE = RegExp('^\\s$');
-var punctRE = RegExp('^[-\"]$');
+var clueRE = /^\w$/;
+var blackRE = /^\s$/;
+var punctRE = /^[-"]$/;
 
 var SQ_ENTRY = "acrostic-entry";
 var SQ_BLACK = "acrostic-black";
@@ -48,10 +48,10 @@ isBoard = function (b) {
 };
 
 boardOfQuote = function (quote, width) {
-    var q = quote.toUpperCase(); 
-
     assert(typeof quote === "string");
     assert(typeof width === "number");
+
+    var q = quote.toUpperCase(); 
 
     var squares = [];
     var height = 1;
@@ -142,7 +142,7 @@ clearSquare = function (s) {
     assert(isSquare(s));
 
     return { type: s.type,
-             c: s.type === SQ_ENTRY ? " " : s.c };
+             c: s.type === SQ_ENTRY ? '' : s.c };
 };
 
 clearBoard = function (b) {
@@ -162,16 +162,22 @@ isClueSquare = function (cs) {
            "c" in cs;
 };
 
-isClue = function (c) {
-    if (typeof(c) !== "array") { return false; }
+isClueAnswer = function (ca) {
+    if (typeof ca !== "object") { return false; }
 
-    for (var i = 0;i < c.length;i++) {
-        if (!isClueSquare(c[i])) {
+    for (var i = 0;i < ca.length;i++) {
+        if (!isClueSquare(ca[i])) {
             return false;
         }
     }
 
     return true;
+};
+
+isClue = function (c) {
+    return typeof c === "object" &&
+           "answer" in c && isClueAnswer(c.answer) &&
+           "clue" in c && typeof c.clue === "string";
 };
 
 isCluelist = function (cl) {
@@ -183,14 +189,57 @@ isCluelist = function (cl) {
 
     var cluetext = cl.author + cl.title;
     if (cluetext.length !== clues.length) { return false; }
-
+    
     for (var i = 0;i < cl.clues.length;i++) {
         var c = cl.clues[i];
         
-        if (!isClue(c) || cluetext.charAt(0) !== c[0].c) {
+        if (!(isClue(c) &&
+              sanitize(cluetext.charAt(i)) === 
+              sanitize(c.answer[0].c))) {
             return false;
         }
     }
 
     return true;
 };
+
+answerOfCAN = function (answer, numbers) {
+    assert(typeof answer === "string");
+    assert(typeof numbers === "object");
+    assert(answer.length === numbers.length);
+
+    a = [];
+    for (var i = 0;i < answer.length;i++) {
+        a.push({ c: answer.charAt(i),
+                 number: numbers[i] });
+    }
+
+    return a;
+}
+
+sanitize = function (s) {
+    return s.toUpperCase().replace(/\s/g,"");
+};
+
+cluelistOfClues = function (cas, author, title) {
+    assert(typeof cas === "object");
+    assert(typeof author === "string");
+    assert(typeof title === "string");
+
+    var clues = [];
+    for (var i = 0;i < cas.length;i++) {
+        var c = cas[i];
+        assert(typeof c === "object" &&
+               "clue" in c && typeof c.clue === "string" &&
+               "answer" in c && typeof c.answer === "string" &&
+               "numbers" in c && typeof c.numbers === "object");
+        clues.push({ clue: c.clue, 
+                     answer: answerOfCAN(c.answer,c.numbers) });
+    }
+
+    return { author: sanitize(author), 
+             title: sanitize(title), 
+             clues: clues };
+};
+
+// TODO lettering of clues, numbering of squares
