@@ -23,7 +23,6 @@ span.acrostic-square {
     display: table-cell;
 
     border: solid #000 1px;
-    border: solid #000 1px;
     margin: 0;
 
     text-align: center;
@@ -42,4 +41,51 @@ span.acrostic-square.acrostic-entry {
 
 span.acrostic-square.acrostic-punct {
     background-color: #fff;
+}
+
+div.acrostic-cluelist {
+    width: 100%;
+}
+
+div.acrostic-clueentry {
+    display: table;
+
+    border-spacing: 5px;
+
+    table-layout: fixed;
+    empty-cells: show;
+
+    /* TODO column mode */
+    float: left;
+    padding-right: 10px;
+
+    height: auto;
+    width: auto;
+}
+
+div.acrostic-letters {
+    display: table-row;
+}
+
+span.acrostic-letter {
+    display: table-cell;
+
+    text-align: center;
+
+    min-width: 25px;
+    padding: 0px;
+}
+
+div.acrostic-numbers {
+    display: table-row;
+}
+
+span.acrostic-number {
+    display: table-cell;
+    border-top: solid #000 1px;
+
+    text-align: center;
+    font-size: x-small;
+
+    margin: 5px;
 }

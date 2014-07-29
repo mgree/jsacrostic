@@ -16,21 +16,21 @@ title = "Lives of Girls and Women";
 clues = [{ clue: "1", answer: "manowt" },
          { clue: "2", answer: "ulast" },
          { clue: "3", answer: "niwthot" },
-         { clue: "4", answer: "rcfatasiesoself-deeption" }, 
+         { clue: "4", answer: "rcfatas" }, 
          { clue: "5", answer: "oecutfffromth" },
-         { clue: "6", answer: "lstakesandconfusionofthepastgraeand" },
+         { clue: "6", answer: "lstakesand" },
          { clue: "7", answer: "isimpecarrying" }, 
          { clue: "8", answer: "vasmallsuitcas" }, 
          { clue: "9", answer: "egettingonabus" },
          { clue: "10", answer: "slikegi" },
          { clue: "11", answer: "oinmovielevinghme" },
-         { clue: "12", answer: "fconvetsloversIsupposedI" },
+         { clue: "12", answer: "fconvetslov" },
          { clue: "13", answer: "guletstartedoyral" },
          { clue: "14", answer: "ile" },
-         { clue: "15", answer: "r" },
-         { clue: "16", answer: "l" },
-         { clue: "17", answer: "s" },
-         { clue: "18", answer: "a" },
+         { clue: "15", answer: "ronofthepastgraeand" },
+         { clue: "16", answer: "lersIsupposedI" },
+         { clue: "17", answer: "siesoself-deeption" },
+         { clue: "18", answer: "aconfusi" },
          { clue: "19", answer: "n" },
          { clue: "20", answer: "d" },
          { clue: "21", answer: "w" },
@@ -64,6 +64,8 @@ jQuery(function ($) {
   $(domOfBoard(b)).insertAfter('#acrostic');
   $("<br/>").insertAfter('#acrostic');
   $(domOfBoard(clearBoard(b))).insertAfter('#acrostic');  
+  c = cluelistOfClues(clues,author,title);
+  $(domOfCluelist(c)).insertAfter('#acrostic');
 });
 </script>
 </head>

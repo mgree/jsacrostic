@@ -244,7 +244,8 @@ cluelistOfClues = function (cas, author, title) {
 };
 
 letterOfIndex = function (i) {
-    assert(typeof i === number && 0 <= i && i < 51); // TODO crappy arbitrary limit...
+    assert(typeof i === "number" && 
+           0 <= i && i < 51); // TODO crappy arbitrary limit...
 
     return "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".charAt(i);
 };
@@ -253,15 +254,15 @@ formatClue = function (clue, i) {
     return letterOfIndex(i) + ". " + clue;
 };
 
-domOfCluelist = function (c) {
-    assert(isCluelist(c));
+domOfCluelist = function (cl) {
+    assert(isCluelist(cl));
 
     // TODO abstract out document variable
     var cluelist = document.createElement("div");
     cluelist.setAttribute("class","acrostic-cluelist");
 
-    for (var i = 0;i < cluelist.clues.length;i++) {
-        var c = cluelist.clues[i];
+    for (var i = 0;i < cl.clues.length;i++) {
+        var c = cl.clues[i];
 
         var clueEntry = document.createElement("div");
         clueEntry.setAttribute("class","acrostic-clueentry");
@@ -272,27 +273,28 @@ domOfCluelist = function (c) {
         clue.appendChild(document.createTextNode(formatClue(c.clue,i)));
         clueEntry.appendChild(clue);
         
-        // add the entry text
-        var entry = document.createElement("div");
-        entry.setAttribute("class","acrostic-entry");
+        // add slots and the numbers
+        var letters = document.createElement("div");
+        letters.setAttribute("class","acrostic-letters");
+        var numbers = document.createElement("div");
+        numbers.setAttribute("class","acrostic-numbers");
         for (var j = 0;j < c.answer.length;j++) {   
             var answer = c.answer[j];
          
-            // add the actual slot
-            var slot = document.createElement("div");
-            slot.setAttribute("class","acrostic-entryslot");
-            slot.appendChild(document.createTextNode(answer.c));
-            
-            entry.appendChild(slot);
+            // add the actual letter
+            var letter = document.createElement("span");
+            letter.setAttribute("class","acrostic-letter");
+            letter.appendChild(document.createTextNode(answer.c));
+            letters.appendChild(letter);
 
             // now add its number
             var number = document.createElement("span");
-            number.setAttribute("class","acrostic-slotnumber");
+            number.setAttribute("class","acrostic-number");
             number.appendChild(document.createTextNode(answer.number));
-
-            entry.appendChild(number);
+            numbers.appendChild(number);
         }
-        clueEntry.appendChild(entry);
+        clueEntry.appendChild(letters);
+        clueEntry.appendChild(numbers);
 
         // with everything wrapped up, save the clue entry and move on
         cluelist.appendChild(clueEntry);
