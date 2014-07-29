@@ -83,7 +83,11 @@ boardOfQuote = function (quote, width) {
             if (row === width) {
                 row = 0;
                 height += 1;
+            }
+
+            if (s.type === SQ_ENTRY) {
                 number += 1;
+                s.number = number;
             }
 
             squares.push(s);
@@ -438,6 +442,35 @@ playAcrostic = function (initialState, board, clues) {
         }
     }
 
+    var squareOf = {};
+    var number = 0;
+    var upOf = {};
+    var downOf = {};
+    for (var i = 0;i < board.squares.length;i++) {
+        if (board.squares[i].type === SQ_ENTRY) {
+            number += 1;
+            squareOf[number] = i;
+
+            for (var above = i-board.width;
+                 above > 0;
+                 above -= board.width) {
+                if (board.squares[above].type === SQ_ENTRY) {
+                    upOf[number] = board.squares[above].number
+                    break;
+                }
+            }
+
+            for (var below = i+board.width;
+                 below < board.squares.length;
+                 below += board.width) {
+                if (board.squares[below].type === SQ_ENTRY) {
+                    downOf[number] = board.squares[below].number;
+                    break;
+                }
+            }
+        }
+    }
+
     moveFocus = function (state,key) {
         assert(isState(state));
 
@@ -445,8 +478,15 @@ playAcrostic = function (initialState, board, clues) {
             var number = 
                 key === K_LEFT ? state.number - 1 :
                 key === K_RIGHT ? state.number + 1 :
-                key === K_UP ? assert(false) :
-                key === K_DOWN ? assert(false) : assert(false);
+                key === K_UP ? upOf[state.number] :
+                key === K_DOWN ? downOf[state.number] : assert(false);
+
+            if (number === undefined || 
+                number < 0 || number > board.number) {
+                // TODO beep or something---an invalid move
+                number = state.number;
+            }
+            
             return { focus: state.focus, number: number };
         } else {
             assert(false);
