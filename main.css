@@ -41,7 +41,13 @@ span.acrostic-square.acrostic-entry {
 }
 
 span.acrostic-square.acrostic-entry.acrostic-primary {
+    border: solid #a22 1px;
     background-color: #a22;
+}
+
+span.acrostic-square.acrostic-entry.acrostic-secondary {
+    border: solid #a22 1px;
+    background-color: #faa;
 }
 
 span.acrostic-square.acrostic-entry span.acrostic-square-number {
@@ -108,7 +114,7 @@ span.acrostic-letter {
 
     text-align: center;
 
-    border: solid 1px #fff;
+    border: solid #fff 1px;
 
     min-width: 28px;
     max-width: 28px;
@@ -134,9 +140,11 @@ span.acrostic-number {
 }
 
 span.acrostic-primary {
+    border: solid #a22 1px;
     background-color: #a22;
 }
 
 span.acrostic-secondary {
     border: solid #a22 1px;
+    background-color: #faa;
 }
