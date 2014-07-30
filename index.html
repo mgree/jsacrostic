@@ -64,7 +64,7 @@ assert(isBoard(boardOfQuote(quote,25)));
   $('#acrostic').replaceWith(domOfBoard(b,"board"));
   $(domOfCluelist(c,"clues")).insertAfter("#board");
  
-  state = { number: 1, focus: F_BOARD };
+  state = { number: 1, focus: F_CLUES };
   playAcrostic(state, b, c);  
 });
 </script>
