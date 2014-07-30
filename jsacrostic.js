@@ -412,7 +412,6 @@ typeCharacter = function (c) {
 }
 
 updateDisplay = function (state) {
-    console.log(state);
     assert(isState(state));
 
     // drop old mapping
@@ -438,6 +437,11 @@ K_LEFT = 37;
 K_UP = 38;
 K_RIGHT = 39;
 K_DOWN = 40;
+
+extractNumber = function (n) {
+    // arcane enough for ya? :/
+    return Number($(n).attr("id").split("-")[2]);
+};
 
 playAcrostic = function (initialState, board, clues) {
     var state = cloneState(initialState);
@@ -543,9 +547,17 @@ playAcrostic = function (initialState, board, clues) {
     });
 
     $("span.acrostic-square[id^=acrostic-square-]").click(function (evt) {
-        // arcane enough for ya? :/
-        var number = Number(evt.currentTarget.getAttribute("id").split("-")[2]);
-        state = { number: number, focus: F_BOARD };
+        state = { number: extractNumber(evt.currentTarget), focus: F_BOARD };
+        updateDisplay(state);
+    });
+
+    $("span.acrostic-letter[id^=acrostic-clue-]").click(function (evt) {
+        state = { number: extractNumber(evt.currentTarget), focus: F_CLUES };
+        updateDisplay(state);
+    });
+
+    $("span.acrostic-number").click(function (evt) {
+        state = { number: Number($(evt.currentTarget).text()), focus: F_CLUES };
         updateDisplay(state);
     });
 
@@ -554,7 +566,6 @@ playAcrostic = function (initialState, board, clues) {
 
 // TODO cross-checking
 // TODO pushing '?' gets you to a help screen
-// TODO click to focus
 // TODO better layout of clues (sizing?)
 
 });
