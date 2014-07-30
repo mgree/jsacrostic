@@ -545,6 +545,7 @@ playAcrostic = function (initialState, board, clues) {
 };
 
 // TODO cross-checking
+// TODO pushing '?' gets you to a help screen
 // TODO click to focus
 // TODO better layout of clues (sizing?)
 
