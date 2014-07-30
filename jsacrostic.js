@@ -430,6 +430,7 @@ updateDisplay = function (state) {
     $('body').focus();
 };
 
+K_BACKSPACE = 8;
 K_TAB = 9;
 K_LEFT = 37;
 K_UP = 38;
@@ -518,6 +519,9 @@ playAcrostic = function (initialState, board, clues) {
         if (evt.keyCode === K_TAB) {
             evt.preventDefault();
             state = flipFocus(state);
+        } else if (evt.keyCode === K_BACKSPACE) {
+            evt.preventDefault();
+            typeCharacter(String.fromCharCode(""));
         } else if (K_LEFT <= evt.keyCode && evt.keyCode <= K_DOWN)  {
             evt.preventDefault();
             state = moveFocus(state, evt.keyCode);
@@ -538,7 +542,6 @@ playAcrostic = function (initialState, board, clues) {
     updateDisplay(state);
 };
 
-// TODO backspace
 // TODO cross-checking
 // TODO click to focus
 // TODO better layout of clues (sizing?)
