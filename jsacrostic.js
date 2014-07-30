@@ -168,7 +168,6 @@ domOfBoard = function (b,id) {
         }
         square.appendChild(document.createTextNode(s.c));
 
-
         row.appendChild(square);
     }
 
@@ -405,8 +404,11 @@ flipFocus = function (state) {
 }
 
 typeCharacter = function (c) {
-    $(".acrostic-primary").text(c);
-    $(".acrostic-secondary").text(c);
+    var isTextNode = function () { return this.nodeType === 3; };
+
+    // make sure we get the textnodes only, to not mess up square numberings
+    $(".acrostic-primary").contents().filter(isTextNode).replaceWith(c);
+    $(".acrostic-secondary").contents().filter(isTextNode).replaceWith(c);
 }
 
 updateDisplay = function (state) {
@@ -424,6 +426,8 @@ updateDisplay = function (state) {
 
     primary.addClass("acrostic-primary");
     secondary.addClass("acrostic-secondary");
+
+    $('body').focus();
 };
 
 K_TAB = 9;
@@ -493,7 +497,7 @@ playAcrostic = function (initialState, board, clues) {
                  assert(false);
 
             if (ci.clue < 0 || ci.clue >= clues.clues.length ||
-                ci.idx < 0 || ci.idx > clues.clues[ci.clue].answer.length) {
+                ci.idx < 0 || ci.idx >= clues.clues[ci.clue].answer.length) {
                 // TODO beep or something---an invalid move
                 number = state.number;
             } else {
@@ -512,8 +516,10 @@ playAcrostic = function (initialState, board, clues) {
 
     $("body").keydown(function (evt) {
         if (evt.keyCode === K_TAB) {
+            evt.preventDefault();
             state = flipFocus(state);
         } else if (K_LEFT <= evt.keyCode && evt.keyCode <= K_DOWN)  {
+            evt.preventDefault();
             state = moveFocus(state, evt.keyCode);
         } else if (clueRE.test(String.fromCharCode(evt.which))) {
             // NB the state doesn't change...
