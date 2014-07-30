@@ -522,9 +522,12 @@ playAcrostic = function (initialState, board, clues) {
             evt.preventDefault();
             state = moveFocus(state, evt.keyCode);
         } else if (clueRE.test(String.fromCharCode(evt.which))) {
-            // NB the state doesn't change...
             // ??? should we bother updating board/clues? why/why not?
+            // typing doesn't update the state...
             typeCharacter(String.fromCharCode(evt.which));
+
+            // ... but we move to the right, if we can
+            state = moveFocus(state, K_RIGHT);
         } else {
             console.log(evt);
         }
