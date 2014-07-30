@@ -542,12 +542,11 @@ playAcrostic = function (initialState, board, clues) {
         updateDisplay(state);
     });
 
-    var squares = $("span.acrostic-square[id^=acrostic-square-]").click(
-        function (evt) {
-            // arcane enough for ya? :/
-            var number = Number(evt.currentTarget.getAttribute("id").split("-")[2]);
-            state = { number: number, focus: F_BOARD };
-            updateDisplay(state);
+    $("span.acrostic-square[id^=acrostic-square-]").click(function (evt) {
+        // arcane enough for ya? :/
+        var number = Number(evt.currentTarget.getAttribute("id").split("-")[2]);
+        state = { number: number, focus: F_BOARD };
+        updateDisplay(state);
     });
 
     updateDisplay(state);
