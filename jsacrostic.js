@@ -431,6 +431,7 @@ updateDisplay = function (state) {
 };
 
 K_BACKSPACE = 8;
+K_DELETE = 46;
 K_TAB = 9;
 K_LEFT = 37;
 K_UP = 38;
@@ -519,7 +520,8 @@ playAcrostic = function (initialState, board, clues) {
         if (evt.keyCode === K_TAB) {
             evt.preventDefault();
             state = flipFocus(state);
-        } else if (evt.keyCode === K_BACKSPACE) {
+        } else if (evt.keyCode === K_BACKSPACE || 
+                   evt.keyCode === K_DELETE) {
             evt.preventDefault();
             typeCharacter(String.fromCharCode(""));
         } else if (K_LEFT <= evt.keyCode && evt.keyCode <= K_DOWN)  {
