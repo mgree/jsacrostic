@@ -404,6 +404,11 @@ flipFocus = function (state) {
              focus: state.focus === F_BOARD ? F_CLUES : F_BOARD };
 }
 
+typeCharacter = function (c) {
+    $(".acrostic-primary").text(c);
+    $(".acrostic-secondary").text(c);
+}
+
 updateDisplay = function (state) {
     assert(isState(state));
 
@@ -510,6 +515,10 @@ playAcrostic = function (initialState, board, clues) {
             state = flipFocus(state);
         } else if (K_LEFT <= evt.keyCode && evt.keyCode <= K_DOWN)  {
             state = moveFocus(state, evt.keyCode);
+        } else if (clueRE.test(String.fromCharCode(evt.which))) {
+            // NB the state doesn't change...
+            // ??? should we bother updating board/clues? why/why not?
+            typeCharacter(String.fromCharCode(evt.which));
         } else {
             console.log(evt);
         }
@@ -521,7 +530,6 @@ playAcrostic = function (initialState, board, clues) {
 };
 
 // TODO cross-checking
-// TODO editing
 // TODO keep focus, even when tab happens
 
 });
