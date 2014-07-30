@@ -538,7 +538,9 @@ playAcrostic = function (initialState, board, clues) {
     updateDisplay(state);
 };
 
+// TODO backspace
 // TODO cross-checking
-// TODO keep focus, even when tab happens
+// TODO click to focus
+// TODO better layout of clues (sizing?)
 
 });
