@@ -336,7 +336,7 @@ domOfCluelist = function (cl,id) {
 
         var clueEntry = document.createElement("div");
         clueEntry.setAttribute("class","acrostic-clueentry");
-        clueEntry.setAttribute("id","acrostic-clue-"+idx);
+        clueEntry.setAttribute("id","acrostic-clueentry-"+idx);
 
         // add the clue text
         var clue = document.createElement("span");
@@ -412,6 +412,7 @@ typeCharacter = function (c) {
 }
 
 updateDisplay = function (state) {
+    console.log(state);
     assert(isState(state));
 
     // drop old mapping
@@ -540,7 +541,15 @@ playAcrostic = function (initialState, board, clues) {
 
         updateDisplay(state);
     });
-    
+
+    var squares = $("span.acrostic-square[id^=acrostic-square-]").click(
+        function (evt) {
+            // arcane enough for ya? :/
+            var number = Number(evt.currentTarget.getAttribute("id").split("-")[2]);
+            state = { number: number, focus: F_BOARD };
+            updateDisplay(state);
+    });
+
     updateDisplay(state);
 };
 
