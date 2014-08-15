@@ -19,7 +19,6 @@ div.acrostic-board div.acrostic-row {
     min-height: 20px;
 }
 
-
 span.acrostic-square {
     display: table-cell;
 
@@ -34,6 +33,10 @@ span.acrostic-square {
 
     resize: none;
     z-index: 2;
+}
+
+span.acrostic-wrong {
+    text-decoration: line-through;
 }
 
 span.acrostic-square.acrostic-entry {

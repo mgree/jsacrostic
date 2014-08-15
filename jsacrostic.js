@@ -403,12 +403,23 @@ flipFocus = function (state) {
              focus: state.focus === F_BOARD ? F_CLUES : F_BOARD };
 }
 
-typeCharacter = function (c) {
+squareText = function (s) {
     var isTextNode = function () { return this.nodeType === 3; };
 
-    // make sure we get the textnodes only, to not mess up square numberings
-    $(".acrostic-primary").contents().filter(isTextNode).replaceWith(c);
-    $(".acrostic-secondary").contents().filter(isTextNode).replaceWith(c);
+    return s.contents().filter(isTextNode);
+}
+
+typeCharacter = function (c) {
+    var p = $(".acrostic-primary");
+    var s = $(".acrostic-secondary");
+
+    // update the square's text
+    squareText(p).replaceWith(c);
+    squareText(s).replaceWith(c);
+
+    // and typing eliminates wrong marks
+    p.removeClass("acrostic-wrong");
+    s.removeClass("acrostic-wrong");
 }
 
 updateDisplay = function (state) {
@@ -564,7 +575,30 @@ playAcrostic = function (initialState, board, clues) {
     updateDisplay(state);
 };
 
-// TODO cross-checking
+crossCheck = function () {
+    var allCorrect = true;
+
+    $("span.acrostic-square[id^=acrostic-square-]").each(function (idx) {
+        var id = extractNumber(this);
+
+        var sq = $(this);
+        var clue = $("span#" + clueId(id));
+
+        var stext = squareText(sq).text();
+        var ctext = squareText(clue).text()
+
+        if (ctext !== "" && stext !== "" && stext !== ctext) {
+            // mark wrong squares
+            sq.addClass("acrostic-wrong");
+            clue.addClass("acrostic-wrong");
+
+            allCorrect = false;
+        }
+    });
+
+    return allCorrect;
+};
+
 // TODO pushing '?' gets you to a help screen
 // TODO better layout of clues (sizing?)
 
