@@ -50,16 +50,16 @@ for (var i = 0;i < clues.length;i++) {
      function (a) { return a === "-" ? -1 : number++; });
 }
 
-assert(isBoard(boardOfQuote(quote,20)));
-assert(isBoard(boardOfQuote(quote,25)));
+console.assert(isBoard(boardOfQuote(quote,20)));
+console.assert(isBoard(boardOfQuote(quote,25)));
 
- assert(isCluelist(cluelistOfClues(clues,author,title)));
+console.assert(isCluelist(cluelistOfClues(clues,author,title)));
 
   b = boardOfQuote(quote,32);
   c = cluelistOfClues(clues,author,title);
-  assert(isBoard(b) && isCluelist(c));
+  console.assert(isBoard(b) && isCluelist(c));
   b = letterBoard(b,c);
-  assert(isBoard(b));
+  console.assert(isBoard(b));
 
   $('#acrostic').replaceWith(domOfBoard(b,"board"));
   $(domOfCluelist(c,"clues")).insertAfter("#board");

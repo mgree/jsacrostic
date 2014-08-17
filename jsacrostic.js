@@ -14,8 +14,6 @@ var SQ_ENTRY = "acrostic-entry";
 var SQ_BLACK = "acrostic-black";
 var SQ_PUNCTUATION = "acrostic-punct";
 
-assert = function (e) { if (!e) { throw "Failed assertion!"; } };
-
 isSquareType = function (st) {
     return st === SQ_ENTRY || 
            st === SQ_BLACK || 
@@ -68,8 +66,8 @@ isBoard = function (b) {
 };
 
 boardOfQuote = function (quote, width) {
-    assert(typeof quote === "string");
-    assert(typeof width === "number");
+    console.assert(typeof quote === "string");
+    console.assert(typeof width === "number");
 
     var q = quote.toUpperCase(); 
 
@@ -100,7 +98,7 @@ boardOfQuote = function (quote, width) {
 };
 
 quoteOfBoard = function (b) {
-    assert(isBoard(b));
+    console.assert(isBoard(b));
     
     var quote = "";
     for (var i = 0;i < b.squares.length;i++) {
@@ -116,17 +114,17 @@ quoteOfBoard = function (b) {
 };
 
 squareId = function (i) { 
-    assert(typeof i === "number");
+    console.assert(typeof i === "number",typeof i);
     return "acrostic-square-" + i; 
 };
 
 clueId = function (i) { 
-    assert(typeof i === "number");
+    console.assert(typeof i === "number");
     return "acrostic-clue-" + i; 
 };
 
 domOfBoard = function (b,id) {
-    assert(isBoard(b));
+    console.assert(isBoard(b));
 
     // TODO abstract out the document...who knows where it came from
     // can we just use jquery to do this?
@@ -171,19 +169,19 @@ domOfBoard = function (b,id) {
         row.appendChild(square);
     }
 
-    assert(numRows == b.height);
+    console.assert(numRows == b.height);
 
     return board;
 };
 
 cloneSquare = function (s) {
-    assert(isSquare(s));
+    console.assert(isSquare(s));
 
     return { type: s.type, c: s.c };
 };
 
 cloneBoard = function (b) {
-    assert(isBoard(b));
+    console.assert(isBoard(b));
 
     var squares = [];
     for (var i = 0;i < b.squares.length;i++) {
@@ -194,7 +192,7 @@ cloneBoard = function (b) {
 };
 
 clearSquare = function (s) {
-    assert(isSquare(s));
+    console.assert(isSquare(s));
 
     return { type: s.type,
              c: s.type === SQ_ENTRY ? '' : s.c };
@@ -251,9 +249,9 @@ slotOfCAN = function (answer, number) {
 };
 
 answerOfCAN = function (answer, numbers) {
-    assert(typeof answer === "string");
-    assert(typeof numbers === "object");
-    assert(answer.length === numbers.length);
+    console.assert(typeof answer === "string");
+    console.assert(typeof numbers === "object");
+    console.assert(answer.length === numbers.length);
 
     a = [];
     for (var i = 0;i < answer.length;i++) {
@@ -268,14 +266,14 @@ sanitize = function (s) {
 };
 
 cluelistOfClues = function (cas, author, title) {
-    assert(typeof cas === "object");
-    assert(typeof author === "string");
-    assert(typeof title === "string");
+    console.assert(typeof cas === "object");
+    console.assert(typeof author === "string");
+    console.assert(typeof title === "string");
 
     var clues = [];
     for (var i = 0;i < cas.length;i++) {
         var c = cas[i];
-        assert(typeof c === "object" &&
+        console.assert(typeof c === "object" &&
                "clue" in c && typeof c.clue === "string" &&
                "answer" in c && typeof c.answer === "string" &&
                "numbers" in c && typeof c.numbers === "object");
@@ -289,7 +287,7 @@ cluelistOfClues = function (cas, author, title) {
 };
 
 letterOfIndex = function (i) {
-    assert(typeof i === "number" && 
+    console.assert(typeof i === "number" && 
            0 <= i && i < 51); // TODO crappy arbitrary limit...
 
     return "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".charAt(i);
@@ -322,7 +320,7 @@ letterBoard = function (b, cl) {
 
 
 domOfCluelist = function (cl,id) {
-    assert(isCluelist(cl));
+    console.assert(isCluelist(cl));
 
     // TODO abstract out document variable
     var cluelist = document.createElement("div");
@@ -383,7 +381,7 @@ F_BOARD = "board";
 F_CLUES = "clues";
 
 cloneState = function (state) {
-    assert(isState(state));
+    console.assert(isState(state));
 
     return { number: state.number, 
              focus: state.focus === F_BOARD ? F_BOARD : F_CLUES };
@@ -397,7 +395,7 @@ isState = function (state) {
 };
 
 flipFocus = function (state) {
-    assert(isState(state));
+    console.assert(isState(state));
 
     return { number: state.number, 
              focus: state.focus === F_BOARD ? F_CLUES : F_BOARD };
@@ -423,7 +421,7 @@ typeCharacter = function (c) {
 }
 
 updateDisplay = function (state) {
-    assert(isState(state));
+    console.assert(isState(state));
 
     // drop old mapping
     $(".acrostic-primary").removeClass("acrostic-primary");
@@ -495,7 +493,7 @@ playAcrostic = function (initialState, board, clues) {
     }
 
     moveFocus = function (state,key) {
-        assert(isState(state));
+        console.assert(isState(state));
 
         var number = undefined;
         if (state.focus === F_BOARD) {
@@ -504,7 +502,7 @@ playAcrostic = function (initialState, board, clues) {
                 key === K_RIGHT ? state.number + 1 :
                 key === K_UP ? upOf[state.number] :
                 key === K_DOWN ? downOf[state.number] : 
-                assert(false);
+                console.assert(false, "bad arrow key");
         } else {
             var ci = clueIndexOf[state.number];
 
@@ -512,7 +510,7 @@ playAcrostic = function (initialState, board, clues) {
                  key === K_RIGHT ? { clue: ci.clue, idx: ci.idx + 1 } :
                  key === K_UP ? { clue: ci.clue-1, idx: 0 } :
                  key === K_DOWN ? { clue: ci.clue+1, idx: 0 } :
-                 assert(false);
+                 console.assert(false, "bad arrow key");
 
             if (ci.clue < 0 || ci.clue >= clues.clues.length ||
                 ci.idx < 0 || ci.idx >= clues.clues[ci.clue].answer.length) {
@@ -575,23 +573,30 @@ playAcrostic = function (initialState, board, clues) {
     updateDisplay(state);
 };
 
+checkSquare = function(id) {
+    var sq = $("span#" + squareId(id));
+    var clue = $("span#" + clueId(id));
+    
+    var stext = squareText(sq).text();
+    var ctext = squareText(clue).text();
+    
+    if (ctext !== "" && stext !== "" && stext !== ctext) {
+        // mark wrong squares
+        sq.addClass("acrostic-wrong");
+        clue.addClass("acrostic-wrong");
+        
+        return false;
+    }
+
+    return true;
+};
+
 crossCheck = function () {
     var allCorrect = true;
 
     $("span.acrostic-square[id^=acrostic-square-]").each(function (idx) {
-        var id = extractNumber(this);
-
-        var sq = $(this);
-        var clue = $("span#" + clueId(id));
-
-        var stext = squareText(sq).text();
-        var ctext = squareText(clue).text()
-
-        if (ctext !== "" && stext !== "" && stext !== ctext) {
-            // mark wrong squares
-            sq.addClass("acrostic-wrong");
-            clue.addClass("acrostic-wrong");
-
+        var id = Number(extractNumber(this));
+        if (!checkSquare(id)) {
             allCorrect = false;
         }
     });
