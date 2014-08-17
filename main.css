@@ -86,9 +86,22 @@ span.acrostic-square.acrostic-punct {
 
 div.acrostic-cluelist {
     width: 100%;
+
+    -moz-column-count: 3;
+    -moz-column-gap: 20px;
+    -webkit-column-count: 3;
+    -webkit-column-gap: 20px;
+    column-count: 3;
+    column-gap: 20px;
+
 }
 
 div.acrostic-clueentry {
+    -webkit-column-break-inside: avoid;
+    -moz-column-break-inside: avoid;
+    column-break-inside: avoid;
+    break-inside: avoid;
+
     display: table;
 
     border-spacing: 5px;
@@ -96,8 +109,8 @@ div.acrostic-clueentry {
     table-layout: fixed;
     empty-cells: show;
 
-    /* TODO column mode */
     float: left;
+    clear: left;
     padding-right: 10px;
 
     height: auto;
@@ -106,6 +119,12 @@ div.acrostic-clueentry {
 
 span.acrostic-clue {
     display: table-header-group;
+
+    width: 100%;
+
+    -webkit-column-break-inside: avoid-column;
+    -moz-column-break-inside: avoid-column;
+    column-break-inside: avoid-column;
 }
 
 div.acrostic-letters {
