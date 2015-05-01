@@ -473,7 +473,7 @@ playAcrostic = function (initialState, board, clues) {
             number += 1;
 
             for (var above = i-board.width;
-                 above > 0;
+                 above >= 0;
                  above -= board.width) {
                 if (board.squares[above].type === SQ_ENTRY) {
                     upOf[number] = board.squares[above].number
