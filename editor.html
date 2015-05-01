@@ -6,6 +6,7 @@
 <link rel="stylesheet" media="screen" href="main.css" />
 <script type="text/javascript" src="jquery-1.11.2.min.js"></script>
 <script type="text/javascript" src="jsacrostic.js"></script>
+<script src="d3.v3.min.js"></script>
 <script type="text/javascript">
 jQuery(function ($) {
 
@@ -43,9 +44,9 @@ clues = [{ clue: "1", answer: "manowt" },
          { clue: "24", answer: "elsui" },
          { clue: "25", answer: "nepastgr" }];
 
-$("#quote").text(quote);
-$("#author").prop("value",author);
-$("#title").prop("value",title);
+$("#quote").val(quote);
+$("#author").val(author);
+$("#title").val(title);
 
 updateReadout();
 });
@@ -67,6 +68,7 @@ updateReadout();
   </form>
   <div id="readout">
     <span id="errors"></span>
+    <div id="histogram"></div>
   </div>
   
   <div id="acrostic"></div>
