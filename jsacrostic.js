@@ -4,8 +4,17 @@
  * cluelist, and it's tricky to keep them in sync. it might be easier
  * to view the quote board as just being a structure and then working
  * almost entirely with cluelists. eh.
+ *
+ * TODO pushing '?' gets you to a help screen
+ * TODO better layout of clues (sizing?)
+ * TODO automatic reflowing CSS (use skeleton? minimum width of puzzle?)
  */
 (jsacrostic = function ($) {
+
+////////////////////////////////////////////////////////////////////////
+// General purpose/utility functions
+////////////////////////////////////////////////////////////////////////
+
 var clueRE = /^\w$/;
 var blackRE = /^\s$/;
 var punctRE = /^[-"]$/;
@@ -39,6 +48,26 @@ squareOfCharacter = function (c) {
 
     return type === undefined ? undefined : { type: type, c: c };
 };
+
+sanitize = function (s) {
+    return s.toUpperCase().replace(/\s/g,"");
+};
+
+// TODO crappy arbitrary limit...
+var alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+CLUE_CHARS = alphabet.concat(alphabet.toLowerCase());
+MAX_CLUES = CLUE_CHARS.length;
+
+letterOfIndex = function (i) {
+    console.assert(typeof i === "number" && 
+           0 <= i && i < MAX_CLUES); 
+
+    return CLUE_CHARS.charAt(i);
+};
+    
+////////////////////////////////////////////////////////////////////////
+// Board structure
+////////////////////////////////////////////////////////////////////////
 
 isBoard = function (b) {
     if (typeof b !== "object") { return false; }
@@ -113,67 +142,7 @@ quoteOfBoard = function (b) {
     return quote;
 };
 
-squareId = function (i) { 
-    console.assert(typeof i === "number",typeof i);
-    return "acrostic-square-" + i; 
-};
-
-clueId = function (i) { 
-    console.assert(typeof i === "number");
-    return "acrostic-clue-" + i; 
-};
-
-domOfBoard = function (b,id) {
-    console.assert(isBoard(b));
-
-    // TODO abstract out the document...who knows where it came from
-    // can we just use jquery to do this?
-    var board = document.createElement("div");
-    // TODO abstract out these attributes
-    board.setAttribute("class","acrostic-board");
-    board.setAttribute("id",id);
-
-    var row = undefined;
-    var numRows = 0;
-    var number = 0;
-    for (var i = 0;i < b.squares.length;i++) {
-        if (i % b.width === 0) {
-            numRows += 1;
-            row = document.createElement("div");
-            row.setAttribute("class","acrostic-row");
-            board.appendChild(row);
-        }
-
-        var s = b.squares[i];
-
-        var square = document.createElement("span");
-        square.setAttribute("class","acrostic-square " + s.type);
-        if (s.type == SQ_ENTRY) {
-            number += 1;
-            square.setAttribute("id",squareId(number));
-            
-            var num = document.createElement("span");
-            num.setAttribute("class","acrostic-square-number");
-            num.appendChild(document.createTextNode(number));
-            square.appendChild(num);
-
-            var clue = document.createElement("span");
-            clue.setAttribute("class","acrostic-square-clue");
-            if ("clue" in s) {
-                clue.appendChild(document.createTextNode(s.clue));
-            }
-            square.appendChild(clue);
-        }
-        square.appendChild(document.createTextNode(s.c));
-
-        row.appendChild(square);
-    }
-
-    console.assert(numRows == b.height);
-
-    return board;
-};
-
+// TODO drop this dead code?
 cloneSquare = function (s) {
     console.assert(isSquare(s));
 
@@ -261,10 +230,6 @@ answerOfCAN = function (answer, numbers) {
     return a;
 };
 
-sanitize = function (s) {
-    return s.toUpperCase().replace(/\s/g,"");
-};
-
 cluelistOfClues = function (cas, author, title) {
     console.assert(typeof cas === "object");
     console.assert(typeof author === "string");
@@ -284,13 +249,6 @@ cluelistOfClues = function (cas, author, title) {
     return { author: sanitize(author), 
              title: sanitize(title), 
              clues: clues };
-};
-
-letterOfIndex = function (i) {
-    console.assert(typeof i === "number" && 
-           0 <= i && i < 51); // TODO crappy arbitrary limit...
-
-    return "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".charAt(i);
 };
 
 letterBoard = function (b, cl) {
@@ -317,7 +275,71 @@ letterBoard = function (b, cl) {
 
     return b;
 };
+    
+////////////////////////////////////////////////////////////////////////
+// Generating DOM representaitons of boards and cluelists
+////////////////////////////////////////////////////////////////////////
+    
+squareId = function (i) { 
+    console.assert(typeof i === "number",typeof i);
+    return "acrostic-square-" + i; 
+};
 
+clueId = function (i) { 
+    console.assert(typeof i === "number");
+    return "acrostic-clue-" + i; 
+};
+
+domOfBoard = function (b,id) {
+    console.assert(isBoard(b));
+
+    // TODO abstract out the document...who knows where it came from
+    // can we just use jquery to do this?
+    var board = document.createElement("div");
+    // TODO abstract out these attributes
+    board.setAttribute("class","acrostic-board");
+    board.setAttribute("id",id);
+
+    var row = undefined;
+    var numRows = 0;
+    var number = 0;
+    for (var i = 0;i < b.squares.length;i++) {
+        if (i % b.width === 0) {
+            numRows += 1;
+            row = document.createElement("div");
+            row.setAttribute("class","acrostic-row");
+            board.appendChild(row);
+        }
+
+        var s = b.squares[i];
+
+        var square = document.createElement("span");
+        square.setAttribute("class","acrostic-square " + s.type);
+        if (s.type == SQ_ENTRY) {
+            number += 1;
+            square.setAttribute("id",squareId(number));
+            
+            var num = document.createElement("span");
+            num.setAttribute("class","acrostic-square-number");
+            num.appendChild(document.createTextNode(number));
+            square.appendChild(num);
+
+            var clue = document.createElement("span");
+            clue.setAttribute("class","acrostic-square-clue");
+            if ("clue" in s) {
+                clue.appendChild(document.createTextNode(s.clue));
+            }
+            square.appendChild(clue);
+        }
+        square.appendChild(document.createTextNode(s.c));
+
+        row.appendChild(square);
+    }
+
+    console.assert(numRows == b.height);
+
+    return board;
+};
 
 domOfCluelist = function (cl,id) {
     console.assert(isCluelist(cl));
@@ -376,6 +398,11 @@ domOfCluelist = function (cl,id) {
 
     return cluelist;
 };
+
+////////////////////////////////////////////////////////////////////////
+// User interface/widgets for playing
+////////////////////////////////////////////////////////////////////////
+
 
 F_BOARD = "board";
 F_CLUES = "clues";
@@ -604,7 +631,56 @@ crossCheck = function () {
     return allCorrect;
 };
 
-// TODO pushing '?' gets you to a help screen
-// TODO better layout of clues (sizing?)
+////////////////////////////////////////////////////////////////////////
+// Statistics/info collection for readout when editing acrostics
+////////////////////////////////////////////////////////////////////////
+
+clueCharacters = function (s) {
+    return s.replace(/\W/g,"").toUpperCase();
+};
+
+makeHistogram = function (s) {
+    var h = {};
+
+    for (var i = 0;i < alphabet.length;i++) {
+        h[alphabet[i]] = 0;
+    }
+
+    for (var i = 0;i < s.length;i++) {
+        h[s[i]] = h[s[i]] + 1;
+    }
+
+    return h;
+};
+
+updateReadout = function () {
+    var quote = clueCharacters($("#quote").text());
+    var author = clueCharacters($("#author").prop("value"));
+    var title = clueCharacters($("#title").prop("value"));
+    var acrostic = author + title;
+
+    var numClues = acrostic.length;
+
+    var hQuote = makeHistogram(quote);
+    var hAcrostic = makeHistogram(author.concat(title));
+
+    // check to make sure the acrostic is realizable
+    var badLetters = [];
+    
+    for (var i = 0;i < alphabet.length;i++) {
+        var c = alphabet[i];
+        if (hAcrostic[c] > hQuote[c]) {
+            badLetters.push(c);
+        }
+    }
+
+    if (badLetters.length > 0) {
+        $("#errors").append(
+            "This acrostic is unrealizable. There are letters that occur in the " +
+            "acrostic (author and title) that don't appear in the quote: " +
+            badLetters.join(", "));
+    }
+        
+};
 
 });

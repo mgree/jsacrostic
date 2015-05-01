@@ -1,5 +1,9 @@
 h1#title { text-align: center; }
 
+form#answer span, form#answer #quote{
+    display: block;
+}    
+
 div.acrostic-board {
     border: solid #000;
     background-color: #000;

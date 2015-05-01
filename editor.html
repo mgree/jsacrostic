@@ -1,0 +1,74 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+<title>jsacrostic</title>
+<link rel="stylesheet" media="screen" href="main.css" />
+<script type="text/javascript" src="jquery-1.11.2.min.js"></script>
+<script type="text/javascript" src="jsacrostic.js"></script>
+<script type="text/javascript">
+jQuery(function ($) {
+
+
+jsacrostic($);
+
+// for testing
+quote = "Now at last without fantasies or self-deception, cut off from the mistakes and confusion of the past, grave and simple, carrying a small suitcase, getting on a bus, like girls in movies leaving home, convents, lovers, I supposed I would get started on my real life."
+author = "Munro";
+title = "Lives of Girls and Women";
+// these could probably be improved :)
+clues = [{ clue: "1", answer: "manowt" },
+         { clue: "2", answer: "ulast" },
+         { clue: "3", answer: "niwthot" },
+         { clue: "4", answer: "rcfatas" }, 
+         { clue: "5", answer: "oecuromth" },
+         { clue: "6", answer: "lstakesand" },
+         { clue: "7", answer: "isimprying" }, 
+         { clue: "8", answer: "vasmaltcas" }, 
+         { clue: "9", answer: "egettingonabus" },
+         { clue: "10", answer: "slikegi" },
+         { clue: "11", answer: "oinmovinghme" },
+         { clue: "12", answer: "fconvetslov" },
+         { clue: "13", answer: "gulettedoyral" },
+         { clue: "14", answer: "ile" },
+         { clue: "15", answer: "ronofthaeand" },
+         { clue: "16", answer: "lersIsupposedI" },
+         { clue: "17", answer: "siself-deeption" },
+         { clue: "18", answer: "aconfusi" },
+         { clue: "19", answer: "necar" },
+         { clue: "20", answer: "dstar" },
+         { clue: "21", answer: "weso" },
+         { clue: "22", answer: "otfff" },
+         { clue: "23", answer: "mielev" },
+         { clue: "24", answer: "elsui" },
+         { clue: "25", answer: "nepastgr" }];
+
+$("#quote").text(quote);
+$("#author").prop("value",author);
+$("#title").prop("value",title);
+
+updateReadout();
+});
+</script>
+</head>
+<body>
+  <form id="answer">
+    <label for="quote">Quote:</label>
+    <textarea id="quote" cols="80" rows="5"></textarea>
+
+    <span>
+      <label for="author">Author:</label>
+      <input type="text" id="author" size="20"></input>
+    </span>
+    <span>
+      <label for="title">Title:</label>
+      <input type="text" id="title" size="30"></input>
+    </span>
+  </form>
+  <div id="readout">
+    <span id="errors"></span>
+  </div>
+  
+  <div id="acrostic"></div>
+</body>
+</html>
