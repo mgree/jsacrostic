@@ -1,38 +1,14 @@
 \documentclass{article}
 
-\usepackage[landscape]{geometry}
+\usepackage[landscape,top=.75in, bottom=.75in, left=.75in, right=.75in]{geometry}
 \usepackage{multicol}
 \usepackage{xcolor}
 \usepackage{colortbl}
+\usepackage{amsmath}
+
+\usepackage{xparse}
 
 \newif\ifsolutions \solutionsfalse
-
-%%% CHARACTER COUNTING
-
-\def\gobblechar{\let\char= }
-\newcount\charcount
-\def\countunlessnil{%
-  \ifx\char\nil \let\next=\relax%
-  \else%
-    \let\next=\auxcountchar%
-    \advance\charcount by 1%
-  \fi\next
-}%
-
-\def\auxcountchar{%
-  \afterassignment\countunlessnil\gobblechar%
-}
-\def\countchar#1{\edef\xx{#1}\charcount=0 \expandafter\auxcountchar\xx\nil}
-
-%%% REPETITION
-
-\makeatletter
-\def\repeat#1{%
-  \expandafter\repeat@aux\romannumeral\number #1000Q{}
-}
-\def\repeat@aux#1{\csname repeat@aux@#1\endcsname}
-\long\def\repeat@aux@m#1Q#2#3{\repeat@aux#1Q{#2#3}{#3}}
-\long\def\repeat@aux@Q#1#2{#1}
 
 %%% BOARD CONSTRUCTION
 
@@ -43,28 +19,41 @@
 
 \newcommand{\E}{\multicolumn{1}{|>{\columncolor{black}}l|}{~}}
 
-\makeatother
-
 %%% CLUE LISTING
 
 \newenvironment{clues}%
 {\begin{multicols}{3}\begin{enumerate}\renewcommand{\theenumi}{\Alph{enumi}}}
 {\end{enumerate}\end{multicols}}
 
+\newcommand\clueletterline[2]{$\underset{\text{\small${}^{#2}$}}{\text{\underline{\phantom{#1}}}}$}
+
+\ExplSyntaxOn
+
+\seq_new:N \l_clueletter
+\newcommand{\clueletter}[1]{%
+  \seq_set_split:Nnn \l_clueletter {-} {#1}
+  \seq_pop_left:NN \l_clueletter \ans
+  \seq_pop_left:NN \l_clueletter \num
+  \clueletterline{\ans}{\num}
+}
+
 \newcommand{\clue}[2]{%
-\countchar{#2}
 \item {#1}~ \\
 \ifsolutions
 \texttt{#2}
 \else
 {
 \large
-\repeat{\the\charcount}{\underline{\phantom{~~}}~}
+\clist_map_inline:nn { #2 } { \clueletter{##1} ~ }
 }
 \fi
 }
 
+\ExplSyntaxOff
+
 \begin{document}
+
+\thispagestyle{empty}
 
 {\tt
 \begin{tabular}{*{25}{@{}|@{}l@{}|@{}}}
@@ -95,31 +84,31 @@
 }
 
 \begin{clues}
-\clue{Red object glazed with rainwater}{WHEELBARROW}
-\clue{Cold compress (2 wds)}{ICEPACK}
-\clue{In bounds}{LEGAL}
-\clue{Unexpected gift}{LAGNIAPPE}
-\clue{``Great men are over-estimated and small men are \underline{\phantom{insupportable}},'' George Eliot, \textit{Adam Bede}}{INSUPPORTABLE}
-\clue{Design}{ARCHITECT}
-\clue{A spoonful of sugar helps overcome it (2 wds.)}{MEDICINAL TASTE}
-\clue{It means the same thing}{SYNONYM}
-\clue{Raises hackles}{IRKS}
-\clue{Yuletide flip, for short}{NOG}
-\clue{``No defeat is made up entirely of defeat'' poem (2 wds.)}{THE DESCENT}
-\clue{Controversial Venus}{HOTTENTOT}
-\clue{Spellbind}{ENTHRALL}
-\clue{Questions doubters (3 wds.)}{ASKS WHY NOT}
-\clue{Lamb-like quality}{MEEKNESS}
-\clue{Vividly reminiscent}{EVOCATIVE}
-\clue{Like a pulse}{RHYTHMIC}
-\clue{Grill on camera?}{INTERVIEW}
-\clue{Frappuccino, e.g. (2 wds.)}{COFFEE SHAKE}
-\clue{Couldn't care less}{APATHETIC}
-\clue{Fit to print}{NEWSWORTHY}
-\clue{``Mad Dog'' Maddux, familiarly}{GREG}
-\clue{Birthplace and hometown of this quote's author}{RUTHERFORD}
-\clue{Adolescent quality, often}{AWKWARDNESS}
-\clue{Devise}{INVENT}
-\clue{Best yet (2 wds.)}{NEW HIGH}
+\clue{Red object glazed with rainwater}{W-0,H-0,E-0,E-0,L-0,B-0,A-0,R-0,R-0,O-0,W-0}
+\clue{Cold compress (2 wds)}{I-0,C-0,E-0,P-0,A-0,C-0,K-0}
+\clue{In bounds}{L-0,E-0,G-0,A-0,L-0}
+\clue{Unexpected gift}{L-0,A-0,G-0,N-0,I-0,A-0,P-0,P-0,E-0}
+\clue{``Great men are over-estimated and small men are \underline{\phantom{insupportable}},'' George Eliot, \textit{Adam Bede}}{I-0,N-0,S-0,U-0,P-0,P-0,O-0,R-0,T-0,A-0,B-0,L-0,E-0}
+\clue{Design}{A-0,R-0,C-0,H-0,I-0,T-0,E-0,C-0,T-0}
+\clue{A spoonful of sugar helps overcome it (2 wds.)}{M-0,E-0,D-0,I-0,C-0,I-0,N-0,A-0,L-0,T-0,A-0,S-0,T-0,E-0}
+\clue{It means the same thing}{S-0,Y-0,N-0,O-0,N-0,Y-0,M-0}
+\clue{Raises hackles}{I-0,R-0,K-0,S-0}
+\clue{Yuletide flip, for short}{N-0,O-0,G-0}
+\clue{``No defeat is made up entirely of defeat'' poem (2 wds.)}{T-0,H-0,E-0,D-0,E-0,S-0,C-0,E-0,N-0,T-0}
+\clue{Controversial Venus}{H-0,O-0,T-0,T-0,E-0,N-0,T-0,O-0,T-0}
+\clue{Spellbind}{E-0,N-0,T-0,H-0,R-0,A-0,L-0,L-0}
+\clue{Questions doubters (3 wds.)}{A-0,S-0,K-0,S-0,W-0,H-0,Y-0,N-0,O-0,T-0}
+\clue{Lamb-like quality}{M-0,E-0,E-0,K-0,N-0,E-0,S-0,S-0}
+\clue{Vividly reminiscent}{E-0,V-0,O-0,C-0,A-0,T-0,I-0,V-0,E-0}
+\clue{Like a pulse}{R-0,H-0,Y-0,T-0,H-0,M-0,I-0,C-0}
+\clue{Grill on camera?}{I-0,N-0,T-0,E-0,R-0,V-0,I-0,E-0,W-0}
+\clue{Frappuccino, e.g. (2 wds.)}{C-0,O-0,F-0,F-0,E-0,E-0,S-0,H-0,A-0,K-0,E-0}
+\clue{Couldn't care less}{A-0,P-0,A-0,T-0,H-0,E-0,T-0,I-0,C-0}
+\clue{Fit to print}{N-0,E-0,W-0,S-0,W-0,O-0,R-0,T-0,H-0,Y-0}
+\clue{``Mad Dog'' Maddux, familiarly}{G-0,R-0,E-0,G-0}
+\clue{Birthplace and hometown of this quote's author}{R-0,U-0,T-0,H-0,E-0,R-0,F-0,O-0,R-0,D-0}
+\clue{Adolescent quality, often}{A-0,W-0,K-0,W-0,A-0,R-0,D-0,N-0,E-0,S-0,S-0}
+\clue{Devise}{I-0,N-0,V-0,E-0,N-0,T-0}
+\clue{Best yet (2 wds.)}{N-0,E-0,W-0,H-0,I-0,G-0,H-0}
 \end{clues}
 \end{document}
