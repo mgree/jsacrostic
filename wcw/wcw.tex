@@ -15,17 +15,17 @@
 \newcounter{quotecounter}
 
 \newcommand{\B}[1]{\stepcounter{quotecounter}%
-{\small${}^{\arabic{quotecounter}}$}{\large\tt \ifsolutions {#1} \else \phantom{M} \fi}}
+{\small${}^{\arabic{quotecounter}}$}{\ifsolutions{\large\tt{#1}}\else\hspace*{.5em}\fi}}
 
 \newcommand{\E}{\multicolumn{1}{|>{\columncolor{black}}l|}{~}}
 
 %%% CLUE LISTING
 
 \newenvironment{clues}%
-{\begin{multicols}{3}\begin{enumerate}\renewcommand{\theenumi}{\Alph{enumi}}}
+{\begin{multicols}{3}\footnotesize\begin{enumerate}\renewcommand{\theenumi}{\Alph{enumi}}}
 {\end{enumerate}\end{multicols}}
 
-\newcommand\clueletterline[2]{$\underset{\text{\small${}^{#2}$}}{\text{\underline{\phantom{#1}}}}$}
+\newcommand\clueletterline[2]{$\underset{\text{\small${}^{#2}$}}{\text{\underline{\,\phantom{M}\,}}}$}
 
 \ExplSyntaxOn
 
@@ -58,57 +58,57 @@
 {\tt
 \begin{tabular}{*{25}{@{}|@{}l@{}|@{}}}
 \hline
-\B{T}&\B{H}&\B{E}& \E  &\B{F}&\B{A}&\B{T}&\B{T}&\B{E}&\B{R}& \E  &\B{W}&\B{E}& \E  &\B{G}&\B{E}&\B{T}& \E  &\B{T}&\B{H}&\B{E}& \E  &\B{D}&\B{U}&\B{L} \\
+\B{T}&\B{H}&\B{E}& \E  &\B{F}&\B{A}&\B{T}&\B{T}&\B{E}&\B{R}& \E  &\B{W}&\B{E}& \E  &\B{G}&\B{E}&\B{T}& \E  &\B{T}&\B{H}&\B{E}& \E  &\B{D}&\B{U}&\B{L} \\[.5em]
 \hline
-\B{L}&\B{E}&\B{R}& \E  &\B{W}&\B{E}& \E  &\B{G}&\B{R}&\B{O}&\B{W}& \E  &\B{O}&\B{N}&\B{L}&\B{Y}& \E  &\B{A}& \E  &\B{S}&\B{I}&\B{M}&\B{P}&\B{E}&\B{R} \\
+\B{L}&\B{E}&\B{R}& \E  &\B{W}&\B{E}& \E  &\B{G}&\B{R}&\B{O}&\B{W}& \E  &\B{O}&\B{N}&\B{L}&\B{Y}& \E  &\B{A}& \E  &\B{S}&\B{I}&\B{M}&\B{P}&\B{E}&\B{R} \\[.5em]
 \hline
-\B{I}&\B{N}&\B{G}& \E  &\B{D}&\B{I}&\B{S}&\B{G}&\B{U}&\B{S}&\B{T}& \E  &\B{L}&\B{I}&\B{K}&\B{E}& \E  &\B{A}& \E  &\B{C}&\B{H}&\B{I}&\B{C}&\B{K}&\B{E} \\
+\B{I}&\B{N}&\B{G}& \E  &\B{D}&\B{I}&\B{S}&\B{G}&\B{U}&\B{S}&\B{T}& \E  &\B{L}&\B{I}&\B{K}&\B{E}& \E  &\B{A}& \E  &\B{C}&\B{H}&\B{I}&\B{C}&\B{K}&\B{E} \\[.5em]
 \hline
-\B{N}& \E  &\B{W}&\B{I}&\B{T}&\B{H}& \E  &\B{A}& \E  &\B{B}&\B{R}&\B{O}&\B{K}&\B{E}&\B{N}& \E  &\B{N}&\B{E}&\B{C}&\B{K}& \E  &\B{T}&\B{H}&\B{A}&\B{T} \\
+\B{N}& \E  &\B{W}&\B{I}&\B{T}&\B{H}& \E  &\B{A}& \E  &\B{B}&\B{R}&\B{O}&\B{K}&\B{E}&\B{N}& \E  &\B{N}&\B{E}&\B{C}&\B{K}& \E  &\B{T}&\B{H}&\B{A}&\B{T} \\[.5em]
 \hline
- \E  &\B{A}&\B{I}&\B{M}&\B{S}& \E  &\B{W}&\B{H}&\B{E}&\B{R}&\B{E}& \E  &\B{I}&\B{T}& \E  &\B{C}&\B{A}&\B{N}&\B{N}&\B{O}&\B{T}& \E  &\B{P}&\B{E}&\B{C} \\
+ \E  &\B{A}&\B{I}&\B{M}&\B{S}& \E  &\B{W}&\B{H}&\B{E}&\B{R}&\B{E}& \E  &\B{I}&\B{T}& \E  &\B{C}&\B{A}&\B{N}&\B{N}&\B{O}&\B{T}& \E  &\B{P}&\B{E}&\B{C} \\[.5em]
 \hline
-\B{K}& \E  &\B{A}&\B{N}&\B{D}& \E  &\B{P}&\B{E}&\B{C}&\B{K}&\B{S}& \E  &\B{O}&\B{N}&\B{L}&\B{Y}& \E  &\B{W}&\B{H}&\B{E}&\B{R}&\B{E}& \E  &\B{I}&\B{T} \\
+\B{K}& \E  &\B{A}&\B{N}&\B{D}& \E  &\B{P}&\B{E}&\B{C}&\B{K}&\B{S}& \E  &\B{O}&\B{N}&\B{L}&\B{Y}& \E  &\B{W}&\B{H}&\B{E}&\B{R}&\B{E}& \E  &\B{I}&\B{T} \\[.5em]
 \hline
- \E  &\B{C}&\B{A}&\B{N}&\B{N}&\B{O}&\B{T}& \E  &\B{A}&\B{I}&\B{M}& \E  &\B{W}&\B{H}&\B{I}&\B{C}&\B{H}& \E  &\B{A}& \E  &\B{H}&\B{O}&\B{G}& \E  &\B{P} \\
+ \E  &\B{C}&\B{A}&\B{N}&\B{N}&\B{O}&\B{T}& \E  &\B{A}&\B{I}&\B{M}& \E  &\B{W}&\B{H}&\B{I}&\B{C}&\B{H}& \E  &\B{A}& \E  &\B{H}&\B{O}&\B{G}& \E  &\B{P} \\[.5em]
 \hline
-\B{L}&\B{E}&\B{N}&\B{T}&\B{Y}& \E  &\B{E}&\B{V}&\B{E}&\B{R}&\B{Y}&\B{W}&\B{H}&\B{E}&\B{R}&\B{E}& \E  &\B{P}&\B{R}&\B{E}&\B{V}&\B{E}&\B{N}&\B{T}&\B{S} \\
+\B{L}&\B{E}&\B{N}&\B{T}&\B{Y}& \E  &\B{E}&\B{V}&\B{E}&\B{R}&\B{Y}&\B{W}&\B{H}&\B{E}&\B{R}&\B{E}& \E  &\B{P}&\B{R}&\B{E}&\B{V}&\B{E}&\B{N}&\B{T}&\B{S} \\[.5em]
 \hline
- \E  &\B{F}&\B{R}&\B{O}&\B{M}& \E  &\B{S}&\B{T}&\B{A}&\B{R}&\B{V}&\B{I}&\B{N}&\B{G}& \E  &\B{T}&\B{O}& \E  &\B{D}&\B{E}&\B{A}&\B{T}&\B{H}& \E  &\B{R} \\
+ \E  &\B{F}&\B{R}&\B{O}&\B{M}& \E  &\B{S}&\B{T}&\B{A}&\B{R}&\B{V}&\B{I}&\B{N}&\B{G}& \E  &\B{T}&\B{O}& \E  &\B{D}&\B{E}&\B{A}&\B{T}&\B{H}& \E  &\B{R} \\[.5em]
 \hline
-\B{E}&\B{V}&\B{E}&\B{A}&\B{L}&\B{S}& \E  &\B{A}&\B{N}&\B{Y}& \E  &\B{C}&\B{O}&\B{N}&\B{T}&\B{A}&\B{C}&\B{T}& \E  &\B{W}&\B{I}&\B{T}&\B{H}& \E  &\B{A} \\
+\B{E}&\B{V}&\B{E}&\B{A}&\B{L}&\B{S}& \E  &\B{A}&\B{N}&\B{Y}& \E  &\B{C}&\B{O}&\B{N}&\B{T}&\B{A}&\B{C}&\B{T}& \E  &\B{W}&\B{I}&\B{T}&\B{H}& \E  &\B{A} \\[.5em]
 \hline
- \E  &\B{P}&\B{O}&\B{S}&\B{S}&\B{I}&\B{B}&\B{L}&\B{E}& \E  &\B{F}&\B{R}&\B{E}&\B{S}&\B{H}&\B{N}&\B{E}&\B{S}&\B{S}& \E  & \E  & \E  & \E  & \E  & \E \\
+ \E  &\B{P}&\B{O}&\B{S}&\B{S}&\B{I}&\B{B}&\B{L}&\B{E}& \E  &\B{F}&\B{R}&\B{E}&\B{S}&\B{H}&\B{N}&\B{E}&\B{S}&\B{S}& \E  & \E  & \E  & \E  & \E  & \E \\[.5em]
 \hline
 \end{tabular}
 }
 
 \begin{clues}
-\clue{Red object glazed with rainwater}{W-0,H-0,E-0,E-0,L-0,B-0,A-0,R-0,R-0,O-0,W-0}
+\clue{Red object glazed with rainwater}{W-0,H-0,E-0,E-0,L-0,B-210,A-0,R-0,R-0,O-0,W-0}
 \clue{Cold compress (2 wds)}{I-0,C-0,E-0,P-0,A-0,C-0,K-0}
 \clue{In bounds}{L-0,E-0,G-0,A-0,L-0}
 \clue{Unexpected gift}{L-0,A-0,G-0,N-0,I-0,A-0,P-0,P-0,E-0}
-\clue{``Great men are over-estimated and small men are \underline{\phantom{insupportable}},'' George Eliot, \textit{Adam Bede}}{I-0,N-0,S-0,U-0,P-0,P-0,O-0,R-0,T-0,A-0,B-0,L-0,E-0}
+\clue{``Great men are over-estimated and small men are \underline{\phantom{insupportable}},'' George Eliot, \textit{Adam Bede}}{I-0,N-0,S-0,U-19,P-0,P-0,O-0,R-0,T-0,A-0,B-68,L-0,E-0}
 \clue{Design}{A-0,R-0,C-0,H-0,I-0,T-0,E-0,C-0,T-0}
-\clue{A spoonful of sugar helps overcome it (2 wds.)}{M-0,E-0,D-0,I-0,C-0,I-0,N-0,A-0,L-0,T-0,A-0,S-0,T-0,E-0}
-\clue{It means the same thing}{S-0,Y-0,N-0,O-0,N-0,Y-0,M-0}
+\clue{A spoonful of sugar helps overcome it (2 wds.)}{M-84,E-0,D-0,I-0,C-0,I-0,N-0,A-0,L-0,T-0,A-0,S-0,T-0,E-0}
+\clue{It means the same thing}{S-0,Y-0,N-0,O-0,N-0,Y-0,M-37}
 \clue{Raises hackles}{I-0,R-0,K-0,S-0}
 \clue{Yuletide flip, for short}{N-0,O-0,G-0}
 \clue{``No defeat is made up entirely of defeat'' poem (2 wds.)}{T-0,H-0,E-0,D-0,E-0,S-0,C-0,E-0,N-0,T-0}
 \clue{Controversial Venus}{H-0,O-0,T-0,T-0,E-0,N-0,T-0,O-0,T-0}
 \clue{Spellbind}{E-0,N-0,T-0,H-0,R-0,A-0,L-0,L-0}
 \clue{Questions doubters (3 wds.)}{A-0,S-0,K-0,S-0,W-0,H-0,Y-0,N-0,O-0,T-0}
-\clue{Lamb-like quality}{M-0,E-0,E-0,K-0,N-0,E-0,S-0,S-0}
-\clue{Vividly reminiscent}{E-0,V-0,O-0,C-0,A-0,T-0,I-0,V-0,E-0}
-\clue{Like a pulse}{R-0,H-0,Y-0,T-0,H-0,M-0,I-0,C-0}
-\clue{Grill on camera?}{I-0,N-0,T-0,E-0,R-0,V-0,I-0,E-0,W-0}
-\clue{Frappuccino, e.g. (2 wds.)}{C-0,O-0,F-0,F-0,E-0,E-0,S-0,H-0,A-0,K-0,E-0}
+\clue{Lamb-like quality}{M-130,E-0,E-0,K-0,N-0,E-0,S-0,S-0}
+\clue{Vividly reminiscent}{E-0,V-185,O-0,C-0,A-0,T-0,I-0,V-159,E-0}
+\clue{Like a pulse}{R-0,H-0,Y-0,T-0,H-0,M-167,I-0,C-0}
+\clue{Grill on camera?}{I-0,N-0,T-0,E-0,R-0,V-172,I-0,E-0,W-0}
+\clue{Frappuccino, e.g. (2 wds.)}{C-0,O-0,F-4,F-213,E-0,E-0,S-0,H-0,A-0,K-0,E-0}
 \clue{Couldn't care less}{A-0,P-0,A-0,T-0,H-0,E-0,T-0,I-0,C-0}
 \clue{Fit to print}{N-0,E-0,W-0,S-0,W-0,O-0,R-0,T-0,H-0,Y-0}
 \clue{``Mad Dog'' Maddux, familiarly}{G-0,R-0,E-0,G-0}
-\clue{Birthplace and hometown of this quote's author}{R-0,U-0,T-0,H-0,E-0,R-0,F-0,O-0,R-0,D-0}
+\clue{Birthplace and hometown of this quote's author}{R-0,U-48,T-0,H-0,E-0,R-0,F-164,O-0,R-0,D-0}
 \clue{Adolescent quality, often}{A-0,W-0,K-0,W-0,A-0,R-0,D-0,N-0,E-0,S-0,S-0}
-\clue{Devise}{I-0,N-0,V-0,E-0,N-0,T-0}
+\clue{Devise}{I-0,N-0,V-147,E-0,N-0,T-0}
 \clue{Best yet (2 wds.)}{N-0,E-0,W-0,H-0,I-0,G-0,H-0}
 \end{clues}
 \end{document}
