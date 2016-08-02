@@ -1,0 +1,125 @@
+\documentclass{article}
+
+\usepackage[landscape]{geometry}
+\usepackage{multicol}
+\usepackage{xcolor}
+\usepackage{colortbl}
+
+\newif\ifsolutions \solutionsfalse
+
+%%% CHARACTER COUNTING
+
+\def\gobblechar{\let\char= }
+\newcount\charcount
+\def\countunlessnil{%
+  \ifx\char\nil \let\next=\relax%
+  \else%
+    \let\next=\auxcountchar%
+    \advance\charcount by 1%
+  \fi\next
+}%
+
+\def\auxcountchar{%
+  \afterassignment\countunlessnil\gobblechar%
+}
+\def\countchar#1{\edef\xx{#1}\charcount=0 \expandafter\auxcountchar\xx\nil}
+
+%%% REPETITION
+
+\makeatletter
+\def\repeat#1{%
+  \expandafter\repeat@aux\romannumeral\number #1000Q{}
+}
+\def\repeat@aux#1{\csname repeat@aux@#1\endcsname}
+\long\def\repeat@aux@m#1Q#2#3{\repeat@aux#1Q{#2#3}{#3}}
+\long\def\repeat@aux@Q#1#2{#1}
+
+%%% BOARD CONSTRUCTION
+
+\newcounter{quotecounter}
+
+\newcommand{\B}[1]{\stepcounter{quotecounter}%
+{\small${}^{\arabic{quotecounter}}$}{\large\tt \ifsolutions {#1} \else \phantom{M} \fi}}
+
+\newcommand{\E}{\multicolumn{1}{|>{\columncolor{black}}l|}{~}}
+
+\makeatother
+
+%%% CLUE LISTING
+
+\newenvironment{clues}%
+{\begin{multicols}{3}\begin{enumerate}\renewcommand{\theenumi}{\Alph{enumi}}}
+{\end{enumerate}\end{multicols}}
+
+\newcommand{\clue}[2]{%
+\countchar{#2}
+\item {#1}~ \\
+\ifsolutions
+\texttt{#2}
+\else
+{
+\large
+\repeat{\the\charcount}{\underline{\phantom{~~}}~}
+}
+\fi
+}
+
+\begin{document}
+
+{\tt
+\begin{tabular}{*{25}{@{}|@{}l@{}|@{}}}
+\hline
+\B{T}&\B{H}&\B{E}& \E  &\B{F}&\B{A}&\B{T}&\B{T}&\B{E}&\B{R}& \E  &\B{W}&\B{E}& \E  &\B{G}&\B{E}&\B{T}& \E  &\B{T}&\B{H}&\B{E}& \E  &\B{D}&\B{U}&\B{L} \\
+\hline
+\B{L}&\B{E}&\B{R}& \E  &\B{W}&\B{E}& \E  &\B{G}&\B{R}&\B{O}&\B{W}& \E  &\B{O}&\B{N}&\B{L}&\B{Y}& \E  &\B{A}& \E  &\B{S}&\B{I}&\B{M}&\B{P}&\B{E}&\B{R} \\
+\hline
+\B{I}&\B{N}&\B{G}& \E  &\B{D}&\B{I}&\B{S}&\B{G}&\B{U}&\B{S}&\B{T}& \E  &\B{L}&\B{I}&\B{K}&\B{E}& \E  &\B{A}& \E  &\B{C}&\B{H}&\B{I}&\B{C}&\B{K}&\B{E} \\
+\hline
+\B{N}& \E  &\B{W}&\B{I}&\B{T}&\B{H}& \E  &\B{A}& \E  &\B{B}&\B{R}&\B{O}&\B{K}&\B{E}&\B{N}& \E  &\B{N}&\B{E}&\B{C}&\B{K}& \E  &\B{T}&\B{H}&\B{A}&\B{T} \\
+\hline
+ \E  &\B{A}&\B{I}&\B{M}&\B{S}& \E  &\B{W}&\B{H}&\B{E}&\B{R}&\B{E}& \E  &\B{I}&\B{T}& \E  &\B{C}&\B{A}&\B{N}&\B{N}&\B{O}&\B{T}& \E  &\B{P}&\B{E}&\B{C} \\
+\hline
+\B{K}& \E  &\B{A}&\B{N}&\B{D}& \E  &\B{P}&\B{E}&\B{C}&\B{K}&\B{S}& \E  &\B{O}&\B{N}&\B{L}&\B{Y}& \E  &\B{W}&\B{H}&\B{E}&\B{R}&\B{E}& \E  &\B{I}&\B{T} \\
+\hline
+ \E  &\B{C}&\B{A}&\B{N}&\B{N}&\B{O}&\B{T}& \E  &\B{A}&\B{I}&\B{M}& \E  &\B{W}&\B{H}&\B{I}&\B{C}&\B{H}& \E  &\B{A}& \E  &\B{H}&\B{O}&\B{G}& \E  &\B{P} \\
+\hline
+\B{L}&\B{E}&\B{N}&\B{T}&\B{Y}& \E  &\B{E}&\B{V}&\B{E}&\B{R}&\B{Y}&\B{W}&\B{H}&\B{E}&\B{R}&\B{E}& \E  &\B{P}&\B{R}&\B{E}&\B{V}&\B{E}&\B{N}&\B{T}&\B{S} \\
+\hline
+ \E  &\B{F}&\B{R}&\B{O}&\B{M}& \E  &\B{S}&\B{T}&\B{A}&\B{R}&\B{V}&\B{I}&\B{N}&\B{G}& \E  &\B{T}&\B{O}& \E  &\B{D}&\B{E}&\B{A}&\B{T}&\B{H}& \E  &\B{R} \\
+\hline
+\B{E}&\B{V}&\B{E}&\B{A}&\B{L}&\B{S}& \E  &\B{A}&\B{N}&\B{Y}& \E  &\B{C}&\B{O}&\B{N}&\B{T}&\B{A}&\B{C}&\B{T}& \E  &\B{W}&\B{I}&\B{T}&\B{H}& \E  &\B{A} \\
+\hline
+ \E  &\B{P}&\B{O}&\B{S}&\B{S}&\B{I}&\B{B}&\B{L}&\B{E}& \E  &\B{F}&\B{R}&\B{E}&\B{S}&\B{H}&\B{N}&\B{E}&\B{S}&\B{S}& \E  & \E  & \E  & \E  & \E  & \E \\
+\hline
+\end{tabular}
+}
+
+\begin{clues}
+\clue{Red object glazed with rainwater}{WHEELBARROW}
+\clue{Cold compress (2 wds)}{ICEPACK}
+\clue{In bounds}{LEGAL}
+\clue{Unexpected gift}{LAGNIAPPE}
+\clue{``Great men are over-estimated and small men are \underline{\phantom{insupportable}},'' George Eliot, \textit{Adam Bede}}{INSUPPORTABLE}
+\clue{Design}{ARCHITECT}
+\clue{A spoonful of sugar helps overcome it (2 wds.)}{MEDICINAL TASTE}
+\clue{It means the same thing}{SYNONYM}
+\clue{Raises hackles}{IRKS}
+\clue{Yuletide flip, for short}{NOG}
+\clue{``No defeat is made up entirely of defeat'' poem (2 wds.)}{THE DESCENT}
+\clue{Controversial Venus}{HOTTENTOT}
+\clue{Spellbind}{ENTHRALL}
+\clue{Questions doubters (3 wds.)}{ASKS WHY NOT}
+\clue{Lamb-like quality}{MEEKNESS}
+\clue{Vividly reminiscent}{EVOCATIVE}
+\clue{Like a pulse}{RHYTHMIC}
+\clue{Grill on camera?}{INTERVIEW}
+\clue{Frappuccino, e.g. (2 wds.)}{COFFEE SHAKE}
+\clue{Couldn't care less}{APATHETIC}
+\clue{Fit to print}{NEWSWORTHY}
+\clue{``Mad Dog'' Maddux, familiarly}{GREG}
+\clue{Birthplace and hometown of this quote's author}{RUTHERFORD}
+\clue{Adolescent quality, often}{AWKWARDNESS}
+\clue{Devise}{INVENT}
+\clue{Best yet (2 wds.)}{NEW HIGH}
+\end{clues}
+\end{document}
