@@ -36,8 +36,8 @@ main = do
     exitSuccess
   let acroWords = length acroInitial
   let lpw = letters `div` acroWords
-  putStrLn $ "Viable!  Acrostic will be " ++ show acroWords ++ " words, using " ++ 
-             show letters ++ " letters (~" ++ show lpw ++ " letters per word)."
+  putStrLn $ "Viable!  Acrostic will be " ++ show acroWords ++ " words, using " ++
+             show letters ++ " letters (~" ++ show lpw ++ " letters per word). Histogram (modulo initialism):"
   putStrLn $ showHistogram $ textHist `dropping` acroInitialHist
   -- showing letter numbering
   putStrLn "Letter numbering: "
@@ -45,13 +45,13 @@ main = do
   -- reading current state of acrostic
   acro <- readFile acroFile
   let acroHist = letterHistogram $ concat $ source $ acro
-  putStrLn "Acrostic histogram:"
+  putStrLn "Acrostic histogram (modulo initialism):"
   putStrLn $ showHistogram (acroHist `dropping` acroInitialHist)
   putStrLn "\nCurrent status:"
-  if (acroHist == textHist) 
+  if (acroHist == textHist)
   then do
     putStrLn "DONE!"
-  else if (acroHist `foundIn` textHist) 
+  else if (acroHist `foundIn` textHist)
   then do
     putStrLn $ "OK, letters left:"
     putStrLn $ showHistogram $ Map.filter (> 0) $ textHist `dropping` acroHist
@@ -70,31 +70,31 @@ wrap ws line = wrapAux ws line line
 
 wrapAux :: [String] -> Int -> Int -> String
 wrapAux [] line left = ""
-wrapAux (w:ws) line left 
+wrapAux (w:ws) line left
   | length w < left = w ++ " " ++ wrapAux ws line (left - length w - 1)
   | otherwise = "\n" ++ w ++ " " ++  wrapAux ws line (line - length w - 1)
 
 showHistogram :: Map.Map Char Int -> String
-showHistogram h = 
-  Map.foldrWithKey 
-    (\c count acc -> 
+showHistogram h =
+  Map.foldrWithKey
+    (\c count acc ->
        [c] ++ ": " ++ show count ++ "\t" ++ replicate count c ++ "\n" ++ acc)
     "" h
 
 letterHistogram :: String -> Map.Map Char Int
-letterHistogram s = histogram s `Map.union` Map.fromList [(x,0) | x <- ['A'..'Z']]
+letterHistogram s = Map.unionWith (+) (histogram s) (Map.fromList [(x,0) | x <- ['A'..'Z']])
 
 showNumbering :: Map.Map Char [Int] -> String
-showNumbering n = 
-  Map.foldrWithKey 
-    (\c locs acc -> 
+showNumbering n =
+  Map.foldrWithKey
+    (\c locs acc ->
        [c] ++ ": " ++ intercalate " " (map show $ sort locs) ++ "\n" ++ acc)
     "" n
 
 letterNumbering :: String -> Map.Map Char [Int]
-letterNumbering s = 
+letterNumbering s =
   let located = zip s [1..] in
-  foldl (\m (c,loc) -> Map.insertWith (++) c [loc] m) Map.empty located 
+  foldl (\m (c,loc) -> Map.insertWith (++) c [loc] m) Map.empty located
 
 histogram :: Ord a => [a] -> Map.Map a Int
 histogram l = foldl (\m x -> Map.insertWith (+) x 1 m) Map.empty l
