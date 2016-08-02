@@ -2,8 +2,7 @@
 
 \usepackage[landscape,top=.75in, bottom=.75in, left=.75in, right=.75in]{geometry}
 \usepackage{multicol}
-\usepackage{xcolor}
-\usepackage{colortbl}
+\usepackage[table]{xcolor}
 \usepackage{amsmath}
 
 \usepackage{xparse}
@@ -14,10 +13,16 @@
 
 \newcounter{quotecounter}
 
-\newcommand{\B}[1]{\stepcounter{quotecounter}%
-{\small${}^{\arabic{quotecounter}}$}{\ifsolutions{\large\tt{#1}}\else\hspace*{.5em}\fi}}
+\newcommand{\triplet}[3]{\rlap{#1}\hfill{#2}\hfill\llap{#3}}
 
-\newcommand{\E}{\multicolumn{1}{|>{\columncolor{black}}l|}{~}}
+\newcommand{\B}[1]{\stepcounter{quotecounter}%
+\triplet%
+  {\footnotesize${}^{\arabic{quotecounter}}$}
+  {\large\ifsolutions{\tt{#1}}\else\hspace*{2em}\fi}
+  {\footnotesize${}^{\text{\ref{clue:\arabic{quotecounter}}}}$}
+}
+
+\newcommand{\E}{\multicolumn{1}{>{\columncolor{black}[1pt][1pt]}l}{}}
 
 %%% CLUE LISTING
 
@@ -25,7 +30,7 @@
 {\begin{multicols}{3}\footnotesize\begin{enumerate}\renewcommand{\theenumi}{\Alph{enumi}}}
 {\end{enumerate}\end{multicols}}
 
-\newcommand\clueletterline[2]{$\underset{\text{\small${}^{#2}$}}{\text{\underline{\,\phantom{M}\,}}}$}
+\newcommand\clueletterline[2]{$\underset{\text{\small${}^{#2}$}}{\text{\underline{\ifsolutions {#1} \else \,\phantom{M}\, \fi}}}$}
 
 \ExplSyntaxOn
 
@@ -34,19 +39,13 @@
   \seq_set_split:Nnn \l_clueletter {-} {#1}
   \seq_pop_left:NN \l_clueletter \ans
   \seq_pop_left:NN \l_clueletter \num
+  \label{clue:\num}
   \clueletterline{\ans}{\num}
 }
 
 \newcommand{\clue}[2]{%
-\item {#1}~ \\
-\ifsolutions
-\texttt{#2}
-\else
-{
-\large
+\item \small {#1}~ \\
 \clist_map_inline:nn { #2 } { \clueletter{##1} ~ }
-}
-\fi
 }
 
 \ExplSyntaxOff
@@ -55,8 +54,9 @@
 
 \thispagestyle{empty}
 
-{\tt
-\begin{tabular}{*{25}{@{}|@{}l@{}|@{}}}
+{
+\setlength\tabcolsep{1pt}
+\begin{tabular}{|*{25}{l@{}|}}
 \hline
 \B{T}&\B{H}&\B{E}& \E  &\B{F}&\B{A}&\B{T}&\B{T}&\B{E}&\B{R}& \E  &\B{W}&\B{E}& \E  &\B{G}&\B{E}&\B{T}& \E  &\B{T}&\B{H}&\B{E}& \E  &\B{D}&\B{U}&\B{L} \\[.5em]
 \hline
@@ -89,7 +89,7 @@
 \clue{In bounds}{L-188,E-215,G-26,A-170,L-20}
 \clue{Unexpected gift}{L-51,A-94,G-12,N-218,I-173,A-190,P-38,P-205,E-146}
 \clue{``Great men are over-estimated and small men are \underline{\phantom{insupportable}},'' George Eliot, \textit{Adam Bede}}{I-120,N-31,S-189,U-19,P-99,P-156,O-177,R-27,T-199,A-80,B-68,L-113,E-219}
-\clue{Design}{A-136,R-183,C-122,H-87,I-201,T-7,E-119,C-52,T-98}
+\clue{Design}{A-136,R-183,C-122,H-87,I-201,T-7,E-119,C-56,T-98}
 \clue{A spoonful of sugar helps overcome it (2 wds.)}{M-84,E-212,D-105,I-64,C-134,I-52,N-174,A-34,L-141,T-15,A-128,S-221,T-92,E-75}
 \clue{It means the same thing}{S-208,Y-150,N-74,O-194,N-124,Y-33,M-37}
 \clue{Raises hackles}{I-58,R-154,K-71,S-220}
