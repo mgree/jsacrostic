@@ -1,5 +1,4 @@
 * core library
-** use jquery (or switch to Elm?)
 ** JSON encoding of a puzzle
 *** embeddable in the URL bar base64 encoded (2083 char max)?
 *** meaningful functions

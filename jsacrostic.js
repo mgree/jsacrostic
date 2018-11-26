@@ -295,10 +295,10 @@ domOfBoard = function (b,id) {
 
     // TODO abstract out the document...who knows where it came from
     // can we just use jquery to do this?
-    var board = document.createElement("div");
+    var board = $('<div></div>');
     // TODO abstract out these attributes
-    board.setAttribute("class","acrostic-board");
-    board.setAttribute("id",id);
+    board.addClass("acrostic-board");
+    board.attr("id",id);
 
     var row = undefined;
     var numRows = 0;
@@ -306,34 +306,34 @@ domOfBoard = function (b,id) {
     for (var i = 0;i < b.squares.length;i++) {
         if (i % b.width === 0) {
             numRows += 1;
-            row = document.createElement("div");
-            row.setAttribute("class","acrostic-row");
-            board.appendChild(row);
+            row = $('<div></div>');
+            row.addClass("acrostic-row");
+            board.append(row);
         }
 
         var s = b.squares[i];
 
-        var square = document.createElement("span");
-        square.setAttribute("class","acrostic-square " + s.type);
+        var square = $('<span></span>');
+        square.addClass("acrostic-square " + s.type);
         if (s.type == SQ_ENTRY) {
             number += 1;
-            square.setAttribute("id",squareId(number));
+            square.attr("id",squareId(number));
             
-            var num = document.createElement("span");
-            num.setAttribute("class","acrostic-square-number");
-            num.appendChild(document.createTextNode(number));
-            square.appendChild(num);
+            var num = $('<span></span>');
+            num.addClass("acrostic-square-number");
+            num.append(document.createTextNode(number));
+            square.append(num);
 
-            var clue = document.createElement("span");
-            clue.setAttribute("class","acrostic-square-clue");
+            var clue = $('<span></span>');
+            clue.addClass("acrostic-square-clue");
             if ("clue" in s) {
-                clue.appendChild(document.createTextNode(s.clue));
+                clue.append(document.createTextNode(s.clue));
             }
-            square.appendChild(clue);
+            square.append(clue);
         }
-        square.appendChild(document.createTextNode(s.c));
+        square.append(document.createTextNode(s.c));
 
-        row.appendChild(square);
+        row.append(square);
     }
 
     console.assert(numRows == b.height);
@@ -345,55 +345,55 @@ domOfCluelist = function (cl,id) {
     console.assert(isCluelist(cl));
 
     // TODO abstract out document variable
-    var cluelist = document.createElement("div");
-    cluelist.setAttribute("class","acrostic-cluelist");
-    cluelist.setAttribute("id",id);
+    var cluelist = $('<div></div>');
+    cluelist.addClass("acrostic-cluelist");
+    cluelist.attr("id",id);
 
     for (var i = 0;i < cl.clues.length;i++) {
         var c = cl.clues[i];
 
         var idx = letterOfIndex(i);
 
-        var clueEntry = document.createElement("div");
-        clueEntry.setAttribute("class","acrostic-clueentry");
-        clueEntry.setAttribute("id","acrostic-clueentry-"+idx);
+        var clueEntry = $('<div></div>');
+        clueEntry.addClass("acrostic-clueentry");
+        clueEntry.attr("id","acrostic-clueentry-"+idx);
 
         // add the clue text
-        var clue = document.createElement("span");
-        clue.setAttribute("class","acrostic-clue");
-        clue.appendChild(document.createTextNode(idx + ". " + c.clue));
-        clueEntry.appendChild(clue);
+        var clue = $('<span></span>');
+        clue.addClass("acrostic-clue");
+        clue.append(document.createTextNode(idx + ". " + c.clue));
+        clueEntry.append(clue);
         
         // add slots and the numbers
-        var letters = document.createElement("div");
-        letters.setAttribute("class","acrostic-letters");
-        var numbers = document.createElement("div");
-        numbers.setAttribute("class","acrostic-numbers");
+        var letters = $('<div></div>');
+        letters.addClass("acrostic-letters");
+        var numbers = $('<div></div>');
+        numbers.addClass("acrostic-numbers");
         for (var j = 0;j < c.answer.length;j++) {   
             var answer = c.answer[j];
          
             // add the actual letter
-            var letter = document.createElement("span");
-            letter.setAttribute("class","acrostic-letter");
+            var letter = $('<span></span>');
+            letter.addClass("acrostic-letter");
             if (answer.number !== undefined) {
-                letter.setAttribute("id",clueId(answer.number));
+                letter.attr("id",clueId(answer.number));
             }
-            letter.appendChild(document.createTextNode(answer.c));
-            letters.appendChild(letter);
+            letter.append(document.createTextNode(answer.c));
+            letters.append(letter);
 
             // now add its number
-            var number = document.createElement("span");
+            var number = $('<span></span>');
             if (answer.number !== undefined) {
-                number.setAttribute("class","acrostic-number");
-                number.appendChild(document.createTextNode(answer.number));
+                number.addClass("acrostic-number");
+                number.append(document.createTextNode(answer.number));
             }
-            numbers.appendChild(number);
+            numbers.append(number);
         }
-        clueEntry.appendChild(letters);
-        clueEntry.appendChild(numbers);
+        clueEntry.append(letters);
+        clueEntry.append(numbers);
 
         // with everything wrapped up, save the clue entry and move on
-        cluelist.appendChild(clueEntry);
+        cluelist.append(clueEntry);
     }
 
     return cluelist;
