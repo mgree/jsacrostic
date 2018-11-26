@@ -37,7 +37,7 @@ main = do
   let acroWords = length acroInitial
   let lpw = letters `div` acroWords
   putStrLn $ "Viable!  Acrostic will be " ++ show acroWords ++ " words, using " ++
-             show letters ++ " letters (~" ++ show lpw ++ " letters per word). Histogram (modulo initialism):"
+             show letters ++ " letters (~" ++ show lpw ++ " letters per word). Histogram (after accounting for initialism):"
   putStrLn $ showHistogram $ textHist `dropping` acroInitialHist
   -- showing letter numbering
   putStrLn "Letter numbering: "
@@ -45,7 +45,7 @@ main = do
   -- reading current state of acrostic
   acro <- readFile acroFile
   let acroHist = letterHistogram $ concat $ source $ acro
-  putStrLn "Acrostic histogram (modulo initialism):"
+  putStrLn "Acrostic histogram (after accounting for initialism):"
   putStrLn $ showHistogram (acroHist `dropping` acroInitialHist)
   putStrLn "\nCurrent status:"
   if (acroHist == textHist)
