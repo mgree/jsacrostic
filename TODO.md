@@ -42,4 +42,4 @@ domOfBoard
 ** letter shuffling
 ** vowel ratios
 ** export to a self-contained play file
-** graph coloring/bin packing algorithm for numbering?
+** graph coloring/bin packing algorithm for numbering for duplicate letters?
